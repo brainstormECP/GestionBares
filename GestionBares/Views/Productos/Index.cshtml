@@ -1,0 +1,68 @@
+﻿@model IEnumerable<GestionBares.Models.Producto>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@section styles{
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+}
+
+<div class="container-fluid">
+    <h3>Listado de Productos</h3>
+    <hr />
+
+    <p>
+        <a class="btn btn-success" asp-action="Create">Nuevo Producto</a>
+    </p>
+    <table class="table dynamic">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nomrbre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Unidad)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Familia)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LimiteParaSolicitar)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nomrbre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unidad.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Familia.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LimiteParaSolicitar)
+                    </td>
+                    <td class="text-right col-md-3">
+                        <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
+                        <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    <script src="~/js/datatables.min.js"></script>
+    <script src="~/js/mbs-qdtf.js"></script>
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+}

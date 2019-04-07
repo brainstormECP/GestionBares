@@ -1,0 +1,41 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+@*<h2>@ViewData["Title"]</h2>*@
+
+<div class="container-fluid" style="padding-top:100px!important;">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <h4>Crear Usuario.</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Input.User">Usuario</label>
+                    <input asp-for="Input.User" class="form-control" />
+                    <span asp-validation-for="Input.User" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Password">Contraseña</label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.ConfirmPassword">Confirmar contraseña</label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-default">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

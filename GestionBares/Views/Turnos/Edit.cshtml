@@ -1,0 +1,54 @@
+﻿@model GestionBares.Models.Turno
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<div class="container-fluid">
+    <h3>Editar Turno</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group col-md-4">
+                    <label asp-for="FechaInicio" class="control-label"></label>
+                    <input asp-for="FechaInicio" class="form-control" />
+                    <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="FechaFin" class="control-label"></label>
+                    <input asp-for="FechaFin" class="form-control" />
+                    <span asp-validation-for="FechaFin" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">@Html.DisplayNameFor(model => model.Activo)</label>
+                    <div class="">
+                        <input type="checkbox" class="make-switch" data-on-text="Si" data-off-text="No" asp-for="Activo" />
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="DependienteId" class="control-label"></label>
+                    <select asp-for="DependienteId" class="form-control" asp-items="ViewBag.DependienteId"></select>
+                    <span asp-validation-for="DependienteId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="BarId" class="control-label"></label>
+                    <select asp-for="BarId" class="form-control" asp-items="ViewBag.BarId"></select>
+                    <span asp-validation-for="BarId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-12 text-right">
+                    <input type="submit" value="Guardar" class="btn btn-success" />
+                    <a asp-action="Index" class="btn btn-default">Atrás</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

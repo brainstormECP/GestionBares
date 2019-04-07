@@ -1,0 +1,45 @@
+﻿@model GestionBares.Models.Turno
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="container-fluid">
+    <h3>Crear Turno</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-4">
+                    <label asp-for="FechaInicio" class="control-label"></label>
+                    <input asp-for="FechaInicio" class="form-control" />
+                    <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="FechaFin" class="control-label"></label>
+                    <input asp-for="FechaFin" class="form-control" />
+                    <span asp-validation-for="FechaFin" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label asp-for="DependienteId" class="control-label"></label>
+                    <select asp-for="DependienteId" class="form-control" asp-items="ViewBag.DependienteId"></select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="BarId" class="control-label"></label>
+                    <select asp-for="BarId" class="form-control" asp-items="ViewBag.BarId"></select>
+                </div>
+                <div class="form-group col-md-12 text-right">
+                    <input type="submit" value="Crear" class="btn btn-success" />
+                    <a asp-action="Index" class="btn btn-default">Atrás</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

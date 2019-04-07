@@ -1,0 +1,44 @@
+﻿@model GestionBares.Models.Producto
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="container-fluid">
+    <h3>Crear Producto</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Nomrbre" class="control-label"></label>
+                    <input asp-for="Nomrbre" class="form-control" />
+                    <span asp-validation-for="Nomrbre" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="UnidadId" class="control-label"></label>
+                    <select asp-for="UnidadId" class="form-control" asp-items="ViewBag.UnidadId"></select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="FamiliaId" class="control-label"></label>
+                    <select asp-for="FamiliaId" class="form-control" asp-items="ViewBag.FamiliaId"></select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="LimiteParaSolicitar" class="control-label"></label>
+                    <input asp-for="LimiteParaSolicitar" class="form-control" />
+                    <span asp-validation-for="LimiteParaSolicitar" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-12 text-right">
+                    <input type="submit" value="Crear" class="btn btn-success" />
+                    <a asp-action="Index" class="btn btn-default">Atrás</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

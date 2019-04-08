@@ -119,7 +119,7 @@ namespace GestionBares.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Nomrbre = table.Column<string>(nullable: false),
+                    Nombre = table.Column<string>(nullable: false),
                     UnidadId = table.Column<int>(nullable: false),
                     FamiliaId = table.Column<int>(nullable: false),
                     LimiteParaSolicitar = table.Column<double>(nullable: false)

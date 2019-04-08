@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GestionBares.Data;
 using GestionBares.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GestionBares.Controllers
 {
@@ -52,7 +53,8 @@ namespace GestionBares.Controllers
         {
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre");
             ViewData["OrigenId"] = new SelectList(_context.Bares, "Id", "Nombre");
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nomrbre");
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre");
+            ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio");
             return View();
         }
 
@@ -61,10 +63,18 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,ProductoId,Cantidad,OrigenId,DestinoId")] Traslado traslado)
+        public IActionResult Create([Bind("Id,ProductoId,Cantidad,OrigenId,DestinoId,TurnoId")] Traslado traslado)
         {
             if (ModelState.IsValid)
             {
+                var user = _context.Set<IdentityUser>().SingleOrDefault(u => u.UserName == User.Identity.Name);
+                if (user == null)
+                {
+                    TempData["error"] = "No estas autenticado";
+                    return RedirectToAction(nameof(Index));
+                }
+                traslado.UsuarioId = user.Id;
+                traslado.Fecha = DateTime.Now;
                 _context.Add(traslado);
                 _context.SaveChanges();
                 TempData["exito"] = "La acción se ha realizado correctamente";
@@ -72,7 +82,8 @@ namespace GestionBares.Controllers
             }
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.DestinoId);
             ViewData["OrigenId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.OrigenId);
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nomrbre", traslado.ProductoId);
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", traslado.ProductoId);
+            ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio", traslado.TurnoId);
             TempData["error"] = "Error en ralizar esta acción";
             return View(traslado);
         }
@@ -92,7 +103,8 @@ namespace GestionBares.Controllers
             }
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.DestinoId);
             ViewData["OrigenId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.OrigenId);
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nomrbre", traslado.ProductoId);
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", traslado.ProductoId);
+            ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio", traslado.TurnoId);
             return View(traslado);
         }
 
@@ -101,7 +113,7 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,ProductoId,Cantidad,OrigenId,DestinoId")] Traslado traslado)
+        public IActionResult Edit(int id, [Bind("Id,ProductoId,Cantidad,OrigenId,DestinoId,TurnoId")] Traslado traslado)
         {
             if (id != traslado.Id)
             {
@@ -131,7 +143,8 @@ namespace GestionBares.Controllers
             }
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.DestinoId);
             ViewData["OrigenId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.OrigenId);
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nomrbre", traslado.ProductoId);
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", traslado.ProductoId);
+            ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio", traslado.TurnoId);
             TempData["error"] = "Error en ralizar esta acción";
             return View(traslado);
         }

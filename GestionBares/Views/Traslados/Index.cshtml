@@ -19,6 +19,9 @@
         <thead>
             <tr>
                 <th>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Producto)
                 </th>
                 <th>
@@ -30,6 +33,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Destino)
                 </th>
+                <th>Efectuado Por</th>
                 <th></th>
             </tr>
         </thead>
@@ -38,16 +42,22 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Producto.Nomrbre)
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Producto.Nombre)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Cantidad)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Origen.Id)
+                        @Html.DisplayFor(modelItem => item.Origen.Nombre)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Destino.Id)
+                        @Html.DisplayFor(modelItem => item.Destino.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Usuario.Nombre)
                     </td>
                     <td class="text-right col-md-3">
                         <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>

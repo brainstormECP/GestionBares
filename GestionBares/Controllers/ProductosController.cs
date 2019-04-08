@@ -59,7 +59,7 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,Nomrbre,UnidadId,FamiliaId,LimiteParaSolicitar")] Producto producto)
+        public IActionResult Create([Bind("Id,Nombre,UnidadId,FamiliaId,LimiteParaSolicitar")] Producto producto)
         {
             if (ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Nomrbre,UnidadId,FamiliaId,LimiteParaSolicitar")] Producto producto)
+        public IActionResult Edit(int id, [Bind("Id,Nombre,UnidadId,FamiliaId,LimiteParaSolicitar")] Producto producto)
         {
             if (id != producto.Id)
             {

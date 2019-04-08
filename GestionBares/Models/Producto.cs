@@ -7,7 +7,7 @@ namespace GestionBares.Models
         public int Id { get; set; }
 
         [Required]
-        public string Nomrbre { get; set; }
+        public string Nombre { get; set; }
         [Display(Name = "Unidad de Medida")]
         public int UnidadId { get; set; }
         public virtual UnidadDeMedida Unidad { get; set; }

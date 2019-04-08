@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionBares.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190407210004_migOne")]
-    partial class migOne
+    [Migration("20190408152934_CambioTraslado")]
+    partial class CambioTraslado
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.2-rtm-30932")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -197,9 +197,15 @@ namespace GestionBares.Data.Migrations
 
                     b.Property<int>("DestinoId");
 
+                    b.Property<DateTime>("Fecha");
+
                     b.Property<int>("OrigenId");
 
                     b.Property<int>("ProductoId");
+
+                    b.Property<int>("TurnoId");
+
+                    b.Property<string>("UsuarioId");
 
                     b.HasKey("Id");
 
@@ -208,6 +214,10 @@ namespace GestionBares.Data.Migrations
                     b.HasIndex("OrigenId");
 
                     b.HasIndex("ProductoId");
+
+                    b.HasIndex("TurnoId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Traslados");
                 });
@@ -524,6 +534,15 @@ namespace GestionBares.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GestionBares.Models.Turno", "Turno")
+                        .WithMany()
+                        .HasForeignKey("TurnoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GestionBares.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId");
                 });
 
             modelBuilder.Entity("GestionBares.Models.Turno", b =>

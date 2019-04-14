@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,6 +14,7 @@ namespace GestionBares.Models
         [Display(Name = "Turno")]
         public int TurnoId { get; set; }
         public virtual Turno Turno { get; set; }
+        public DateTime Fecha { get; set; }
         public virtual ICollection<DetalleControlExistencia> Detalles { get; set; }
         public ControlExistencia()
         {

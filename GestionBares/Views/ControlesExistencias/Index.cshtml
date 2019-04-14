@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<GestionBares.Models.ControlExistencia>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista";
 }
 @section styles{
     <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -9,18 +9,18 @@
 }
 
 <div class="container-fluid">
-    <h3>Listado de ControlExistencia</h3>
+    <h3>Listado de Controles de Existencia</h3>
     <hr />
 
     <p>
-        <a class="btn btn-success" asp-action="Create">Nuevo ControlExistencia</a>
+        <a class="btn btn-success" asp-action="Create">Nuevo Control</a>
     </p>
     <table class="table dynamic">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Turno)
-                </th>
+                <th>Fecha</th>
+                <th>Dependiente</th>
+                <th>Bar</th>                
                 <th></th>
             </tr>
         </thead>
@@ -29,8 +29,10 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Turno.Id)
+                        @Html.DisplayFor(modelItem => item.Fecha)
                     </td>
+                    <td>@item.Turno.Dependiente.Nombre</td>
+                    <td>@item.Turno.Bar.Nombre</td>
                     <td class="text-right col-md-3">
                         <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
                         <a data-hint="Detalles" class="btn btn-info btn-sm view hint--top hint--info" asp-action="Details" asp-route-id="@item.Id"><span class="fa fa-eye" aria-hidden="true"></span></a>

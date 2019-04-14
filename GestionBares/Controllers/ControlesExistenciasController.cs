@@ -22,7 +22,9 @@ namespace GestionBares.Controllers
         // GET: ControlesExistencias
         public IActionResult Index()
         {
-            var applicationDbContext = _context.ControlesDeExistencias.Include(c => c.Turno);
+            var applicationDbContext = _context.ControlesDeExistencias
+                .Include(c => c.Turno.Dependiente)
+                .Include(c => c.Turno.Bar);
             return View(applicationDbContext.ToList());
         }
 

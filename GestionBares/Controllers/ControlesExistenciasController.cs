@@ -81,13 +81,49 @@ namespace GestionBares.Controllers
                 return NotFound();
             }
 
-            var controlExistencia = _context.ControlesDeExistencias.Find(id);
+            var controlExistencia = _context.ControlesDeExistencias
+                .Include(c => c.Turno.Dependiente)
+                .Include(c => c.Turno.Bar)
+                .Include(c => c.Detalles).ThenInclude(c => c.Producto)
+                .SingleOrDefault(c => c.Id == id);
             if (controlExistencia == null)
             {
                 return NotFound();
             }
-            ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "Id", controlExistencia.TurnoId);
+            ViewData["Productos"] = new SelectList(_context.Set<Producto>(), "Id", "Nombre");
             return View(controlExistencia);
+        }
+
+        [HttpPost]
+        public IActionResult AgregarProducto(DetalleControlExistencia detalle)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(detalle);
+                var control = _context.Set<ControlExistencia>()
+                    .Include(c => c.Detalles).ThenInclude(c => c.Producto)
+                    .FirstOrDefault(c => c.Id == detalle.ControlId);
+                _context.SaveChanges();
+
+            }
+            return RedirectToAction(nameof(Edit), new { Id = detalle.ControlId });
+        }
+
+        public IActionResult QuitarDetalle(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var detalle = _context.Set<DetalleControlExistencia>().Find(id);
+            if (detalle == null)
+            {
+                return NotFound();
+            }
+            _context.Remove(detalle);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Edit), new { Id = detalle.ControlId });
         }
 
         // POST: ControlesExistencias/Edit/5

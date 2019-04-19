@@ -13,6 +13,7 @@ using GestionBares.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using GestionBares.Models;
+using GestionBares.Utils;
 
 namespace GestionBares
 {
@@ -38,9 +39,9 @@ namespace GestionBares
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<Usuario>()
-                .AddRoles<IdentityRole>()
+            services.AddIdentity<Usuario, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddTransient<UsuarioSignInManager>();
 
             services.AddTransient<DbContext, ApplicationDbContext>();
 

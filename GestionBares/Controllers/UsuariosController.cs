@@ -9,6 +9,7 @@ using System.Text.Encodings.Web;
 using GestionBares.Models;
 using GestionBares.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 
 namespace GestionBares.Controllers
 {
@@ -18,15 +19,17 @@ namespace GestionBares.Controllers
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
         private readonly UrlEncoder _urlEncoder;
+        public ILogger<Usuario> _logger { get; set; }
 
         public UsuariosController(DbContext context, UserManager<Usuario> userManager,
           SignInManager<Usuario> signInManager,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder, ILogger<Usuario> logger)
         {
             _db = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _urlEncoder = urlEncoder;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -143,6 +146,42 @@ namespace GestionBares.Controllers
             foreach (var rol in usuarioVM.RolesIds)
             {
                 await _userManager.AddToRoleAsync(user.Result, roles.SingleOrDefault(r => r.Id == rol).Name);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Nuevo()
+        {
+            var roles = _db.Set<IdentityRole>();
+            ViewBag.RolesIds = new MultiSelectList(roles, "Name", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Nuevo(NuevoUsuarioVM usuario)
+        {
+            var user = new Usuario
+            {
+                UserName = usuario.Nombre,
+                Email = usuario.Nombre + "@patriarca.cu",
+                Activo = usuario.Activo
+            };
+            var result = await _userManager.CreateAsync(user, usuario.Password);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("Usuario creado correctamente.");
+                foreach (var rol in usuario.RolesIds)
+                {
+                    await _userManager.AddToRoleAsync(user, rol);
+                }
+                _logger.LogInformation("Roles agregados correctamente.");
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction(nameof(Index));
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
             }
             return RedirectToAction(nameof(Index));
         }

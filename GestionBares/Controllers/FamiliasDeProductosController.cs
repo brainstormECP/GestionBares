@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GestionBares.Data;
 using GestionBares.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestionBares.Controllers
 {
+    [Authorize]
     public class FamiliasDeProductosController : Controller
     {
         private readonly ApplicationDbContext _context;

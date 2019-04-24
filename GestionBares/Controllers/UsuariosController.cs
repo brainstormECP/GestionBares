@@ -10,9 +10,11 @@ using GestionBares.Models;
 using GestionBares.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestionBares.Controllers
 {
+    [Authorize]
     public class UsuariosController : Controller
     {
         DbContext _db;

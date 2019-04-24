@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using GestionBares.Data;
 using GestionBares.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestionBares.Controllers
 {
+    [Authorize]
     public class TrasladosController : Controller
     {
         private readonly ApplicationDbContext _context;

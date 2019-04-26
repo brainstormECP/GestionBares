@@ -35,7 +35,7 @@
                         @Html.DisplayFor(modelItem => item.Nombre)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UsuarioId)
+                        @Html.DisplayFor(modelItem => item.Usuario.UserName)
                     </td>
                     <td class="text-right col-md-3">
                         <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>

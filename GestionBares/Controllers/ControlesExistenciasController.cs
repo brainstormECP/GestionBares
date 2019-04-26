@@ -183,6 +183,38 @@ namespace GestionBares.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult PorTurno()
+        {
+            var dependiente = _context.Set<Dependiente>().SingleOrDefault(u => u.Usuario.UserName == User.Identity.Name);
+            if (!_context.Set<Turno>().Any(t => t.DependienteId == dependiente.Id && t.Activo))
+            {
+                return RedirectToAction("Nuevo", "Turnos");
+            }
+            var turno = _context.Set<Turno>()
+                .Include(t => t.Bar)
+                .SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);
+            ControlExistencia control;
+            if (_context.Set<ControlExistencia>().Any(c => c.TurnoId == turno.Id))
+            {
+                control = _context.Set<ControlExistencia>()
+                    .Include(c => c.Turno.Bar)
+                    .Include(c => c.Detalles).ThenInclude(d => d.Producto)
+                    .SingleOrDefault(c => c.TurnoId == turno.Id);
+            }
+            else
+            {
+                control = new ControlExistencia
+                {
+                    Turno = turno,
+                    Fecha = DateTime.Now,
+                };
+                _context.Add(control);
+                _context.SaveChanges();
+            }
+            //agregar solo productos del bar del turno
+            return View(control);
+        }
+
         private bool ControlExistenciaExists(int id)
         {
             return _context.ControlesDeExistencias.Any(e => e.Id == id);

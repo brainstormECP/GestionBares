@@ -8,23 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using GestionBares.Data;
 using GestionBares.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using GestionBares.Utils;
 
 namespace GestionBares.Controllers
 {
     [Authorize]
     public class DependientesController : Controller
     {
+        private readonly UserManager<Usuario> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public DependientesController(ApplicationDbContext context)
+        public DependientesController(ApplicationDbContext context, UserManager<Usuario> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Dependientes
         public IActionResult Index()
         {
-            return View(_context.Dependientes.ToList());
+            return View(_context.Dependientes.Include(d => d.Usuario).ToList());
         }
 
         // GET: Dependientes/Details/5
@@ -48,6 +52,8 @@ namespace GestionBares.Controllers
         // GET: Dependientes/Create
         public IActionResult Create()
         {
+            var users = _userManager.GetUsersInRoleAsync(DefinicionRoles.Dependiente).Result;
+            ViewBag.UsuarioId = new SelectList(users, "Id", "UserName");
             return View();
         }
 
@@ -66,6 +72,8 @@ namespace GestionBares.Controllers
                 return RedirectToAction(nameof(Index));
             }
             TempData["error"] = "Error en ralizar esta acción";
+            var users = _userManager.GetUsersInRoleAsync(DefinicionRoles.Dependiente).Result;
+            ViewBag.UsuarioId = new SelectList(users, "Id", "UserName", dependiente.UsuarioId);
             return View(dependiente);
         }
 
@@ -82,6 +90,8 @@ namespace GestionBares.Controllers
             {
                 return NotFound();
             }
+            var users = _userManager.GetUsersInRoleAsync(DefinicionRoles.Dependiente).Result;
+            ViewBag.UsuarioId = new SelectList(users, "Id", "UserName", dependiente.UsuarioId);
             return View(dependiente);
         }
 
@@ -118,6 +128,8 @@ namespace GestionBares.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var users = _userManager.GetUsersInRoleAsync(DefinicionRoles.Dependiente).Result;
+            ViewBag.UsuarioId = new SelectList(users, "Id", "UserName", dependiente.UsuarioId);
             TempData["error"] = "Error en ralizar esta acción";
             return View(dependiente);
         }

@@ -178,7 +178,7 @@ namespace GestionBares.Controllers
                     await _userManager.AddToRoleAsync(user, rol);
                 }
                 _logger.LogInformation("Roles agregados correctamente.");
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                //await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction(nameof(Index));
             }
             foreach (var error in result.Errors)

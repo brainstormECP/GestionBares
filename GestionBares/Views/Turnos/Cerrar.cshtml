@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Cerrar";
+}
+
+<div class="container-fluid">
+    <h3>Cerrar Turno</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info">Esta seguro de cerrar el turno?</div>
+            <form asp-action="Cerrar">
+                <div class="form-group col-md-12 text-right">
+                    <input type="hidden" value="@ViewBag.TurnoId" />
+                    <input type="submit" value="Cerrar" class="btn btn-danger" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GestionBares.Data;
 using GestionBares.Models;
 using Microsoft.AspNetCore.Authorization;
+using GestionBares.Utils;
 
 namespace GestionBares.Controllers
 {
@@ -75,6 +76,63 @@ namespace GestionBares.Controllers
             ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "Nombre", turno.DependienteId);
             TempData["error"] = "Error en ralizar esta acción";
             return View(turno);
+        }
+
+        [Authorize(Roles = DefinicionRoles.Dependiente)]
+        public IActionResult Nuevo()
+        {
+            var dependiente = _context.Set<Dependiente>().SingleOrDefault(u => u.Usuario.UserName == User.Identity.Name);
+            if (_context.Set<Turno>().Any(t => t.DependienteId == dependiente.Id && t.Activo))
+            {
+                TempData["info"] = "Ya usted tiene un turno abierto.";
+                return RedirectToAction(nameof(Cerrar));
+            }
+            ViewData["BarId"] = new SelectList(_context.Bares, "Id", "Nombre");
+            return View(new Turno { DependienteId = dependiente.Id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Nuevo([Bind("DependienteId,BarId")] Turno turno)
+        {
+            if (turno.BarId > 0 && turno.DependienteId > 0)
+            {
+                turno.Activo = true;
+                turno.FechaInicio = DateTime.Now;
+                _context.Add(turno);
+                _context.SaveChanges();
+                TempData["exito"] = "La acción se ha realizado correctamente";
+                return RedirectToAction("Index", "Home");
+            }
+            ViewData["BarId"] = new SelectList(_context.Bares, "Id", "Nombre", turno.BarId);
+            TempData["error"] = "Error en realizar esta acción";
+            return View(turno);
+        }
+
+        [Authorize(Roles = DefinicionRoles.Dependiente)]
+        public IActionResult Cerrar()
+        {
+            var dependiente = _context.Set<Dependiente>().SingleOrDefault(u => u.Usuario.UserName == User.Identity.Name);
+            if (!_context.Set<Turno>().Any(t => t.DependienteId == dependiente.Id && t.Activo))
+            {
+                TempData["info"] = "Usted no tiene turno por cerrar, si desea abra uno nuevo.";
+                return RedirectToAction(nameof(Nuevo));
+            }
+            var turno = _context.Set<Turno>().SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);
+            ViewBag.TurnoId = turno.Id;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cerrar(int id)
+        {
+            var turno = _context.Set<Turno>().SingleOrDefault(t => t.Id == id);
+            turno.FechaFin = DateTime.Now;
+            turno.Activo = false;
+            _context.SaveChanges();
+            TempData["exito"] = "La acción se ha realizado correctamente";
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Turnos/Edit/5

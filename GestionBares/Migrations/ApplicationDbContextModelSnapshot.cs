@@ -4,16 +4,14 @@ using GestionBares.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace GestionBares.Data.Migrations
+namespace GestionBares.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190414214028_AgregandoFechaAControlDeExistencia")]
-    partial class AgregandoFechaAControlDeExistencia
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,6 +38,8 @@ namespace GestionBares.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Activo");
+
                     b.Property<DateTime>("Fecha");
 
                     b.Property<int>("TurnoId");
@@ -60,15 +60,32 @@ namespace GestionBares.Data.Migrations
                     b.Property<string>("Nombre")
                         .IsRequired();
 
-                    b.Property<int>("UsuarioId");
-
-                    b.Property<string>("UsuarioId1");
+                    b.Property<string>("UsuarioId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId1");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Dependientes");
+                });
+
+            modelBuilder.Entity("GestionBares.Models.DependienteBar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BarId");
+
+                    b.Property<int>("DependienteId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BarId");
+
+                    b.HasIndex("DependienteId");
+
+                    b.ToTable("DependientesBares");
                 });
 
             modelBuilder.Entity("GestionBares.Models.DetalleControlExistencia", b =>
@@ -171,6 +188,9 @@ namespace GestionBares.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Codigo")
+                        .IsRequired();
+
                     b.Property<int>("FamiliaId");
 
                     b.Property<double>("LimiteParaSolicitar");
@@ -189,6 +209,44 @@ namespace GestionBares.Data.Migrations
                     b.ToTable("Productos");
                 });
 
+            modelBuilder.Entity("GestionBares.Models.Standard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BarId");
+
+                    b.Property<int>("ProductoId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BarId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("Standards");
+                });
+
+            modelBuilder.Entity("GestionBares.Models.StandardVenta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BarId");
+
+                    b.Property<int>("ProductoId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BarId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("StandardVentas");
+                });
+
             modelBuilder.Entity("GestionBares.Models.Traslado", b =>
                 {
                     b.Property<int>("Id")
@@ -201,8 +259,6 @@ namespace GestionBares.Data.Migrations
 
                     b.Property<DateTime>("Fecha");
 
-                    b.Property<int>("OrigenId");
-
                     b.Property<int>("ProductoId");
 
                     b.Property<int>("TurnoId");
@@ -212,8 +268,6 @@ namespace GestionBares.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DestinoId");
-
-                    b.HasIndex("OrigenId");
 
                     b.HasIndex("ProductoId");
 
@@ -285,6 +339,14 @@ namespace GestionBares.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new { Id = "1", ConcurrencyStamp = "8686f7b6-f3db-41d3-bd5f-e1bfd53f0947", Name = "ADMINISTRADOR", NormalizedName = "ADMINISTRADOR" },
+                        new { Id = "2", ConcurrencyStamp = "7daf78b4-acec-41a6-92c7-fd5147245309", Name = "DEPENDIENTE", NormalizedName = "DEPENDIENTE" },
+                        new { Id = "3", ConcurrencyStamp = "52577323-a62b-4ca4-bb44-feb83f9786bd", Name = "ALMACEN", NormalizedName = "ALMACEN" },
+                        new { Id = "4", ConcurrencyStamp = "43fe7988-7914-442a-8273-8fc7a762de66", Name = "ECONOMIA", NormalizedName = "ECONOMIA" },
+                        new { Id = "5", ConcurrencyStamp = "fbe0c915-2a56-4f6c-bfde-cdaebd72030d", Name = "A+B", NormalizedName = "A+B" }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -385,11 +447,9 @@ namespace GestionBares.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                    b.Property<string>("ProviderKey");
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -414,17 +474,19 @@ namespace GestionBares.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new { UserId = "f42559a2-2776-4e9b-9ba1-268597eff72b", RoleId = "1" }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
@@ -444,6 +506,10 @@ namespace GestionBares.Data.Migrations
                     b.ToTable("Usuario");
 
                     b.HasDiscriminator().HasValue("Usuario");
+
+                    b.HasData(
+                        new { Id = "f42559a2-2776-4e9b-9ba1-268597eff72b", AccessFailedCount = 0, ConcurrencyStamp = "36fd2616-8e8a-4cc6-8a5a-52d963207836", Email = "admin@patriarca.cu", EmailConfirmed = false, LockoutEnabled = false, NormalizedEmail = "ADMIN@PATRIARCA.CU", NormalizedUserName = "ADMIN", PasswordHash = "AQAAAAEAACcQAAAAEP4OedI6m26WUn/2C4AcBkzdT6SnL/6E+xakQ/9mGAkqqp3t9PwyIR6l9obLouKIVg==", PhoneNumberConfirmed = false, SecurityStamp = "43VMKYQKNTENYZVJNU2TII26X23H5PGV", TwoFactorEnabled = false, UserName = "admin", Activo = true, Nombre = "admin" }
+                    );
                 });
 
             modelBuilder.Entity("GestionBares.Models.ControlExistencia", b =>
@@ -458,7 +524,20 @@ namespace GestionBares.Data.Migrations
                 {
                     b.HasOne("GestionBares.Models.Usuario", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioId1");
+                        .HasForeignKey("UsuarioId");
+                });
+
+            modelBuilder.Entity("GestionBares.Models.DependienteBar", b =>
+                {
+                    b.HasOne("GestionBares.Models.Bar", "Bar")
+                        .WithMany()
+                        .HasForeignKey("BarId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GestionBares.Models.Dependiente", "Dependiente")
+                        .WithMany()
+                        .HasForeignKey("DependienteId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("GestionBares.Models.DetalleControlExistencia", b =>
@@ -520,16 +599,37 @@ namespace GestionBares.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("GestionBares.Models.Standard", b =>
+                {
+                    b.HasOne("GestionBares.Models.Bar", "Bar")
+                        .WithMany()
+                        .HasForeignKey("BarId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GestionBares.Models.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("GestionBares.Models.StandardVenta", b =>
+                {
+                    b.HasOne("GestionBares.Models.Bar", "Bar")
+                        .WithMany()
+                        .HasForeignKey("BarId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GestionBares.Models.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("GestionBares.Models.Traslado", b =>
                 {
                     b.HasOne("GestionBares.Models.Bar", "Destino")
                         .WithMany()
                         .HasForeignKey("DestinoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("GestionBares.Models.Bar", "Origen")
-                        .WithMany()
-                        .HasForeignKey("OrigenId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("GestionBares.Models.Producto", "Producto")
@@ -540,7 +640,7 @@ namespace GestionBares.Data.Migrations
                     b.HasOne("GestionBares.Models.Turno", "Turno")
                         .WithMany()
                         .HasForeignKey("TurnoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("GestionBares.Models.Usuario", "Usuario")
                         .WithMany()

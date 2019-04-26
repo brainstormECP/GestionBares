@@ -5,6 +5,8 @@ namespace GestionBares.Models
     public class Producto
     {
         public int Id { get; set; }
+        [Required]
+        public string Codigo { get; set; }
 
         [Required]
         public string Nombre { get; set; }

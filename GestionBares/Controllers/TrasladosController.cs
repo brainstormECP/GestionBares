@@ -25,7 +25,7 @@ namespace GestionBares.Controllers
         // GET: Traslados
         public IActionResult Index()
         {
-            var applicationDbContext = _context.Traslados.Include(t => t.Destino).Include(t => t.Origen).Include(t => t.Producto);
+            var applicationDbContext = _context.Traslados.Include(t => t.Destino).Include(t => t.Turno).Include(t => t.Producto);
             return View(applicationDbContext.ToList());
         }
 
@@ -39,7 +39,7 @@ namespace GestionBares.Controllers
 
             var traslado = _context.Traslados
                         .Include(t => t.Destino)
-                        .Include(t => t.Origen)
+                        .Include(t => t.Turno)
                         .Include(t => t.Producto)
             .FirstOrDefault(m => m.Id == id);
             if (traslado == null)
@@ -54,7 +54,6 @@ namespace GestionBares.Controllers
         public IActionResult Create()
         {
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre");
-            ViewData["OrigenId"] = new SelectList(_context.Bares, "Id", "Nombre");
             ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre");
             ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio");
             return View();
@@ -65,7 +64,7 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,ProductoId,Cantidad,OrigenId,DestinoId,TurnoId")] Traslado traslado)
+        public IActionResult Create([Bind("Id,ProductoId,Cantidad,DestinoId,TurnoId")] Traslado traslado)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +82,6 @@ namespace GestionBares.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.DestinoId);
-            ViewData["OrigenId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.OrigenId);
             ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", traslado.ProductoId);
             ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio", traslado.TurnoId);
             TempData["error"] = "Error en ralizar esta acción";
@@ -104,7 +102,6 @@ namespace GestionBares.Controllers
                 return NotFound();
             }
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.DestinoId);
-            ViewData["OrigenId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.OrigenId);
             ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", traslado.ProductoId);
             ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio", traslado.TurnoId);
             return View(traslado);
@@ -115,7 +112,7 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,ProductoId,Cantidad,OrigenId,DestinoId,TurnoId")] Traslado traslado)
+        public IActionResult Edit(int id, [Bind("Id,ProductoId,Cantidad,DestinoId,TurnoId")] Traslado traslado)
         {
             if (id != traslado.Id)
             {
@@ -144,7 +141,6 @@ namespace GestionBares.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.DestinoId);
-            ViewData["OrigenId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.OrigenId);
             ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", traslado.ProductoId);
             ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio", traslado.TurnoId);
             TempData["error"] = "Error en ralizar esta acción";

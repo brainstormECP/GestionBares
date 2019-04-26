@@ -18,7 +18,7 @@ namespace GestionBares.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Traslado>().HasOne(t => t.Origen).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Traslado>().HasOne(t => t.Turno).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Traslado>().HasOne(t => t.Destino).WithMany().OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole[] {
@@ -56,5 +56,9 @@ namespace GestionBares.Data
         public DbSet<PedidoAlmacen> PedidosDeAlmacen { get; set; }
         public DbSet<DetallePedidoAlmacen> DetallesPedidosDeAlmacen { get; set; }
         public DbSet<Traslado> Traslados { get; set; }
+        public DbSet<Standard> Standards { get; set; }
+        public DbSet<StandardVenta> StandardVentas { get; set; }
+        public DbSet<DependienteBar> DependientesBares { get; set; }
+
     }
 }

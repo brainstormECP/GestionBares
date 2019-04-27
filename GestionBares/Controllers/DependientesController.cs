@@ -10,6 +10,8 @@ using GestionBares.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using GestionBares.Utils;
+using GestionBares.ViewModel;
+using GestionBares.ViewModels;
 
 namespace GestionBares.Controllers
 {
@@ -28,7 +30,20 @@ namespace GestionBares.Controllers
         // GET: Dependientes
         public IActionResult Index()
         {
-            return View(_context.Dependientes.Include(d => d.Usuario).ToList());
+            var dependientes = _context.Dependientes
+                .Include(d => d.Usuario)
+                .Select(d =>
+                    new DependienteVM
+                    {
+                        Id = d.Id,
+                        Nombre = d.Nombre,
+                        UsuarioId = d.UsuarioId,
+                        NombreDeUsuario = d.Usuario.UserName,
+                        Bares = _context.Set<DependienteBar>().Where(b => b.DependienteId == d.Id).Select(b => b.Bar.Nombre).ToList()
+                    })
+                .ToList();
+
+            return View(dependientes);
         }
 
         // GET: Dependientes/Details/5
@@ -151,9 +166,107 @@ namespace GestionBares.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult SeleccionBares(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var dependiente = _context.Set<Dependiente>().Find(id);
+            var turno = new DependienteBar() { DependienteId = id.Value, Dependiente = dependiente };
+
+            //CODIGO MIO ++++++++
+            foreach (var item in _context.Set<Bar>().ToList())
+            {
+                if (_context.Set<DependienteBar>().Any(c => c.BarId == item.Id && c.DependienteId == turno.DependienteId))
+                {
+                    turno.CheckedTurnos.Add(new CheckedTurno() { Checked = true, BarId = item.Id, Bar = item });
+                }
+                else
+                {
+                    turno.CheckedTurnos.Add(new CheckedTurno() { Checked = false, BarId = item.Id, Bar = item });
+                }
+            }
+            //CODIGO MIO -------
+
+            return View(turno);
+        }
+
+        // POST: Turnos/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SeleccionBares(int id, [Bind("Id,DependienteId,CheckedTurnos")] DependienteBar turno)
+        {
+            if (id != turno.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (_context.Set<DependienteBar>().Any(x => x.BarId == turno.BarId))
+                {
+                    ViewData["BarId"] = new SelectList(_context.Bares, "Id", "Nombre", turno.BarId);
+                    ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "Nombre", turno.DependienteId);
+                    TempData["error"] = "El Bar ya estaba asignado al Dependiente";
+                    return View(turno);
+                }
+                try
+                {
+                    foreach (var item in turno.CheckedTurnos)
+                    {
+                        if (item.Checked == true)
+                        {
+                            if (_context.Set<DependienteBar>().Any(c => c.BarId == item.BarId && c.DependienteId == turno.DependienteId))
+                            {
+                                //No hacer nada!!!
+                            }
+                            else
+                            {
+                                _context.Add(new DependienteBar() { DependienteId = turno.DependienteId, BarId = _context.Bares.Where(c => c.Id == item.BarId).Select(c => c.Id).Single() });
+                            }
+                        }
+                        else
+                        {
+                            if (_context.Set<DependienteBar>().Any(c => c.BarId == item.BarId && c.DependienteId == turno.DependienteId))
+                            {
+                                _context.Remove(_context.Set<DependienteBar>().Where(c => c.BarId == item.BarId && c.DependienteId == turno.DependienteId).Single());
+                            }
+                        }
+                    }
+
+                    _context.SaveChanges();
+                    TempData["exito"] = "La acción se ha realizado correctamente";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!DependienteBarExists(turno.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["BarId"] = new SelectList(_context.Bares, "Id", "Nombre", turno.BarId);
+            TempData["error"] = "Error en ralizar esta acción";
+            return View(turno);
+        }
+
         private bool DependienteExists(int id)
         {
             return _context.Dependientes.Any(e => e.Id == id);
+        }
+
+        private bool DependienteBarExists(int id)
+        {
+            return _context.Set<DependienteBar>().Any(e => e.Id == id);
         }
     }
 }

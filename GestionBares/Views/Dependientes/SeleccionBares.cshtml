@@ -1,0 +1,76 @@
+﻿@model GestionBares.Models.DependienteBar
+@{
+            ViewData["Title"] = "Edit";
+        }
+
+
+        @section styles{
+            <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+            <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+        }
+
+s
+<div>
+    <div>
+        <div class="container-fluid">
+            <h3>Modificar Turno</h3>
+            <hr />
+
+            <form asp-action="SeleccionBares">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="DependienteId" class="form-control" type="hidden" />
+                <div class="row">
+                <div class="form-group col-md-4">
+                    <h3>@Model.Dependiente.Nombre</h3>
+                </div>
+                </div>
+                <div class="row">
+                <div class="form-group col-md-4">
+                    <table class="table table-stripped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Agregar/Eliminar
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Bar.Nombre)
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int x = 0; x < Model.CheckedTurnos.Count; x++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="CheckedTurnos[x].Checked" type="checkbox" />
+                                    <input asp-for="CheckedTurnos[x].BarId" value="@Model.CheckedTurnos[x].BarId" type="hidden" />
+                                </td>
+                                <td>
+                                    @Model.CheckedTurnos[x].Bar.Nombre
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                </div> 
+                </div>
+                <div class="row">           
+                <div class="form-group col-md-12 text-left">
+                    <input type="submit" value="Guardar" class="btn btn-success" />
+                    <a asp-action="Index" class="btn btn-default">Atrás</a>
+                </div>
+                </div>    
+            </form>
+        </div>
+        @section scripts{
+
+            <script src="~/js/datatables.min.js"></script>
+            <script src="~/js/mbs-qdtf.js"></script>
+            <script>
+                $(document).ready(function () {
+                });
+            </script>
+        }
+    </div>
+</div>

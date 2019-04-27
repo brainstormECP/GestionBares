@@ -15,7 +15,9 @@
     <p>
         <a class="btn btn-success" asp-action="Create">Nuevo Bar</a>
     </p>
-    <table class="table dynamic">
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table dynamic">
         <thead>
             <tr>
                 <th>
@@ -32,13 +34,18 @@
                         @Html.DisplayFor(modelItem => item.Nombre)
                     </td>
                     <td class="text-right col-md-3">
-                        <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
+                        <a data-hint="Standard" class="btn btn-default btn-sm edit hint--top hint--info" asp-action="Standard" asp-route-id="@item.Id"><span class="fa fa-list" aria-hidden="true"></span></a>
+                        <a data-hint="Standard de ventas" class="btn btn-default btn-sm edit hint--top hint--info" asp-action="StandardDeVentas" asp-route-id="@item.Id"><span class="fa fa-usd" aria-hidden="true"></span></a>
+                        <a data-hint="Editar" class="btn btn-info btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
                         <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+        </div>
+    </div>
+    
 </div>
 @section scripts{
     <script src="~/js/datatables.min.js"></script>

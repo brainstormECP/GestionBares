@@ -1,0 +1,80 @@
+﻿<div>
+    @model GestionBares.Models.Standard
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@section styles{
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+}
+
+
+
+<div class="container-fluid">
+    <h3>Modificar Standard</h3>
+    <hr />
+
+    <form asp-action="Standard">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="BarId" class="form-control" type="hidden" />
+        <div class="row">
+            <div class="form-group col-md-4">
+                <h3>@Model.Bar.Nombre</h3>
+            </div>
+        </div>        
+        <div class="row">
+            <div class="form-group col-md-4">
+                <table class="table dynamic">
+                    <thead>
+                        <tr>
+                            <th>
+                                Agregar/Eliminar
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Producto.Codigo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Producto.Nombre)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int x = 0; x < Model.CheckedProductos.Count; x++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="CheckedProductos[x].Checked" type="checkbox" />
+                                    <input asp-for="CheckedProductos[x].ProductoId" value="@Model.CheckedProductos[x].ProductoId" type="hidden" />
+                                </td>
+                                <td>
+                                    @Model.CheckedProductos[x].Producto.Codigo
+                                </td>
+                                <td>
+                                    @Model.CheckedProductos[x].Producto.Nombre
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row"></div>
+            <div class="form-group col-md-12 text-left">
+                <input type="submit" value="Guardar" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-default">Atrás</a>
+            </div>
+        </div>
+    </form>
+</div>
+@section scripts{
+
+    <script src="~/js/datatables.min.js"></script>
+    <script src="~/js/mbs-qdtf.js"></script>
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+}
+
+</div>

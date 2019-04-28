@@ -8,8 +8,9 @@ namespace GestionBares.Models
 
         [Required]
         public string Nombre { get; set; }
+
         [Display(Name = "Usuario")]
-        public int UsuarioId { get; set; }
+        public string UsuarioId { get; set; }
         public virtual Usuario Usuario { get; set; }
     }
 }

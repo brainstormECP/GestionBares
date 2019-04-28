@@ -1,25 +1,31 @@
+using GestionBares.ViewModel;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestionBares.Models
 {
-    public class Turno
+    public class DependienteBar
     {
         public int Id { get; set; }
-        [Display(Name = "Fecha de Inicio")]
-        public DateTime FechaInicio { get; set; }
-        [Display(Name = "Fecha Fin")]
-        public DateTime? FechaFin { get; set; }
-        public bool Activo { get; set; }
         [Display(Name = "Dependiente")]
         public int DependienteId { get; set; }
         public virtual Dependiente Dependiente { get; set; }
         [Display(Name = "Bar")]
         public int BarId { get; set; }
         public virtual Bar Bar { get; set; }
-
+        [BindProperty]
         [NotMapped]
-        public string Descripcion { get => String.Format("{0} - {1}", Dependiente != null ? Dependiente.Nombre : "", Bar != null ? Bar.Nombre : ""); }
+        public List<int> SelectBars { get; set; }
+        [BindProperty]
+        [NotMapped]
+        public List<CheckedTurno> CheckedTurnos { get; set; }
+
+        public DependienteBar()
+        {
+            CheckedTurnos = new List<CheckedTurno>();
+        }
     }
 }

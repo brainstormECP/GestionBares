@@ -19,6 +19,7 @@ namespace GestionBares.Models
         public int BarId { get; set; }
         public virtual Bar Bar { get; set; }
 
-     
+        [NotMapped]
+        public string Descripcion { get => String.Format("{0} - {1}", Dependiente != null ? Dependiente.Nombre : "", Bar != null ? Bar.Nombre : ""); }
     }
 }

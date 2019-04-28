@@ -29,13 +29,21 @@
             {
                 <tr>
                     <td>
+                        <span class="hidden">@item.Fecha.Ticks</span>
                         @Html.DisplayFor(modelItem => item.Fecha)
                     </td>
                     <td>@item.Turno.Dependiente.Nombre</td>
                     <td>@item.Turno.Bar.Nombre</td>
                     <td class="text-right col-md-3">
-                        <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
-                        <a data-hint="Detalles" class="btn btn-info btn-sm view hint--top hint--info" asp-action="Details" asp-route-id="@item.Id"><span class="fa fa-eye" aria-hidden="true"></span></a>
+                        @if (item.Activo)
+                        {
+                            <a data-hint="terminar edicion" class="btn btn-warning btn-sm hint--top hint--warning" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Cerrar" asp-route-id="@item.Id"><span class="fa fa-close" aria-hidden="true"></span></a>                            
+                        } 
+                        @if (User.IsInRole("ADMINISTRADOR") || item.Activo)
+                        {
+                            <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
+                        }
+                        <a data-hint="Detalles" class="btn btn-info btn-sm view hint--top hint--info" asp-action="Detalles" asp-route-id="@item.Id"><span class="fa fa-eye" aria-hidden="true"></span></a>
                         <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>
                     </td>
                 </tr>

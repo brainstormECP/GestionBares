@@ -1,4 +1,4 @@
-﻿@model GestionBares.Models.ControlExistencia
+﻿@model GestionBares.ViewModels.ControlExistenciaVM
 
 @{
     ViewData["Title"] = "Existencias";
@@ -9,48 +9,46 @@
 }
 
 <div class="container-fluid">
-    <h3>Listado de Existencias del Bar: @Model.Turno.Bar.Nombre </h3>
+    <h3>Listado de Existencias del Bar: @Model.Bar</h3>
+    <h4>Confeccionado por: @Model.Dependiente en la fecha: @Model.Fecha</h4>
     <hr />
     <div class="col-md-12">
-        <form action="" method="POST" class="form-inline" role="form">
+        <form asp-action="PorTurno" method="POST" class="form-inline" role="form">
+            <input type="hidden" asp-for="Id"/>
+            <div class="row">
                 <div class="form-group">
-                    <label class="sr-only" for="">Productos</label>
-                    <select class="form-control">
-                        <option>Seleccione un producto</option>
-                    </select>                    
+                    <table class="table dynamic">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Unidad</th>
+                                <th>Anterior</th>                
+                                <th>Cantidad</th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Detalles.Count;i++)
+                            {
+                                <tr>
+                                    <td>@Model.Detalles[i].Producto</td>
+                                    <td>@Model.Detalles[i].Unidad</td>
+                                    <td>@Model.Detalles[i].CantidadAnterior</td>
+                                    <td>
+                                        <input type="hidden" name="Detalles[@i].ProductoId" value="@Model.Detalles[i].ProductoId" />
+                                        <input class="form-control" name="Detalles[@i].Cantidad" value="@Model.Detalles[i].Cantidad" />
+                                    </td>                                    
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-                <div class="form-group">
-                    <label class="sr-only" for="">Cantidad</label>
-                    <input type="email" class="form-control" id="" placeholder="Cantidad">
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>                
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <a asp-action="Index" class="btn btn-default">Atras</a>
+        </form>
     </div>
     <div class="col-md-12">
-        <table class="table dynamic">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Unidad</th>
-                <th>Cantidad</th>                
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Detalles)
-            {
-                <tr>
-                    <td>@item.Producto.Nombre</td>
-                    <td>@item.Producto.Unidad.Nombre</td>
-                    <td>@item.Cantidad</td>
-                    <td class="text-right col-md-3">
-                        <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
-                        <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        
     </div>
 </div>
 @section scripts{

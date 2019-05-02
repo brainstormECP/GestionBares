@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using GestionBares.Utils;
 using GestionBares.ViewModel;
 using GestionBares.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace GestionBares.Controllers
 {
@@ -20,11 +21,12 @@ namespace GestionBares.Controllers
     {
         private readonly UserManager<Usuario> _userManager;
         private readonly ApplicationDbContext _context;
-
-        public DependientesController(ApplicationDbContext context, UserManager<Usuario> userManager)
+        public ILogger<Usuario> _logger { get; set; }
+        public DependientesController(ApplicationDbContext context, UserManager<Usuario> userManager, ILogger<Usuario> logger)
         {
             _context = context;
             _userManager = userManager;
+            _logger = logger;
         }
 
         // GET: Dependientes
@@ -36,7 +38,7 @@ namespace GestionBares.Controllers
                     new DependienteVM
                     {
                         Id = d.Id,
-                        Nombre = d.Nombre,
+                        Nombre = d.Nombres,
                         UsuarioId = d.UsuarioId,
                         NombreDeUsuario = d.Usuario.UserName,
                         Bares = _context.Set<DependienteBar>().Where(b => b.DependienteId == d.Id).Select(b => b.Bar.Nombre).ToList()
@@ -67,8 +69,6 @@ namespace GestionBares.Controllers
         // GET: Dependientes/Create
         public IActionResult Create()
         {
-            var users = _userManager.GetUsersInRoleAsync(DefinicionRoles.Dependiente).Result;
-            ViewBag.UsuarioId = new SelectList(users, "Id", "UserName");
             return View();
         }
 
@@ -77,18 +77,38 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,Nombre,UsuarioId")] Dependiente dependiente)
+        public IActionResult Create(NuevoDependienteVM dependiente)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(dependiente);
-                _context.SaveChanges();
-                TempData["exito"] = "La acción se ha realizado correctamente";
-                return RedirectToAction(nameof(Index));
+                var user = new Usuario
+                {
+                    UserName = dependiente.NombreUsuario,
+                    Email = dependiente.NombreUsuario + "@patriarca.cu",
+                    Activo = true
+                };
+                var result = _userManager.CreateAsync(user, dependiente.Password);
+                if (result.Result.Succeeded)
+                {
+                    _logger.LogInformation("Usuario creado correctamente.");
+                    _userManager.AddToRoleAsync(user, DefinicionRoles.Dependiente);
+
+                    _context.Add(new Dependiente
+                    {
+                        Nombres = dependiente.Nombres,
+                        Apellidos = dependiente.Apellidos,
+                        Usuario = user,
+                    });
+                    _context.SaveChanges();
+                    TempData["exito"] = "La acción se ha realizado correctamente";
+                    return RedirectToAction(nameof(Index));
+                }
+                foreach (var error in result.Result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
-            TempData["error"] = "Error en ralizar esta acción";
-            var users = _userManager.GetUsersInRoleAsync(DefinicionRoles.Dependiente).Result;
-            ViewBag.UsuarioId = new SelectList(users, "Id", "UserName", dependiente.UsuarioId);
+            TempData["error"] = "Error en realizar esta acción";
             return View(dependiente);
         }
 
@@ -99,14 +119,11 @@ namespace GestionBares.Controllers
             {
                 return NotFound();
             }
-
             var dependiente = _context.Dependientes.Find(id);
             if (dependiente == null)
             {
                 return NotFound();
             }
-            var users = _userManager.GetUsersInRoleAsync(DefinicionRoles.Dependiente).Result;
-            ViewBag.UsuarioId = new SelectList(users, "Id", "UserName", dependiente.UsuarioId);
             return View(dependiente);
         }
 
@@ -115,7 +132,7 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Nombre,UsuarioId")] Dependiente dependiente)
+        public IActionResult Edit(int id, [Bind("Id,Nombres,Apellidos,UsuarioId")] Dependiente dependiente)
         {
             if (id != dependiente.Id)
             {
@@ -143,8 +160,6 @@ namespace GestionBares.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            var users = _userManager.GetUsersInRoleAsync(DefinicionRoles.Dependiente).Result;
-            ViewBag.UsuarioId = new SelectList(users, "Id", "UserName", dependiente.UsuarioId);
             TempData["error"] = "Error en ralizar esta acción";
             return View(dependiente);
         }

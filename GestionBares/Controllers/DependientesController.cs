@@ -39,6 +39,7 @@ namespace GestionBares.Controllers
                     {
                         Id = d.Id,
                         Nombre = d.Nombres,
+                        Activo = d.Activo,
                         UsuarioId = d.UsuarioId,
                         NombreDeUsuario = d.Usuario.UserName,
                         Bares = _context.Set<DependienteBar>().Where(b => b.DependienteId == d.Id).Select(b => b.Bar.Nombre).ToList()
@@ -98,6 +99,7 @@ namespace GestionBares.Controllers
                         Nombres = dependiente.Nombres,
                         Apellidos = dependiente.Apellidos,
                         Usuario = user,
+                        Activo = true,
                     });
                     _context.SaveChanges();
                     TempData["exito"] = "La acción se ha realizado correctamente";
@@ -132,7 +134,7 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Nombres,Apellidos,UsuarioId")] Dependiente dependiente)
+        public IActionResult Edit(int id, [Bind("Id,Nombres,Apellidos,UsuarioId,Activo")] Dependiente dependiente)
         {
             if (id != dependiente.Id)
             {
@@ -166,8 +168,12 @@ namespace GestionBares.Controllers
 
         public IActionResult Eliminar(int id)
         {
-            var dependiente = _context.Dependientes.Find(id);
-            _context.Dependientes.Remove(dependiente);
+            var dependiente = _context.Dependientes
+                .Include(d => d.Usuario)
+                .FirstOrDefault(d => d.Id == id);
+            dependiente.Activo = !dependiente.Activo;
+            dependiente.Usuario.Activo = dependiente.Activo;
+            _context.Update(dependiente);
             try
             {
                 _context.SaveChanges();

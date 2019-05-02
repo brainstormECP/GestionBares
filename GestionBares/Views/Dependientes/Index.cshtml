@@ -46,7 +46,14 @@
                     <td class="text-right col-md-3">
                         <a data-hint="Seleccionar Bares" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="SeleccionBares" asp-route-id="@item.Id"><span class="fa fa-list" aria-hidden="true"></span></a>
                         <a data-hint="Editar" class="btn btn-info btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
-                        <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                        @if (item.Activo)
+                        {
+                            <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>                            
+                        }
+                        else{
+                            <a data-hint="Activar" class="btn btn-success btn-sm delete hint--top hint--success" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-check" aria-hidden="true"></span></a>                            
+                        }
+                        
                     </td>
                 </tr>
             }

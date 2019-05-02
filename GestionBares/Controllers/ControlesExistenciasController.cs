@@ -140,7 +140,7 @@ namespace GestionBares.Controllers
                 Id = control.Id,
                 TurnoId = control.TurnoId,
                 Bar = control.Turno.Bar.Nombre,
-                Dependiente = control.Turno.Dependiente.Nombre,
+                Dependiente = control.Turno.Dependiente.NombreCompleto,
                 Fecha = control.Fecha,
                 Detalles = productos.ToList()
             };
@@ -220,7 +220,7 @@ namespace GestionBares.Controllers
                 Id = control.Id,
                 TurnoId = turno.Id,
                 Bar = turno.Bar.Nombre,
-                Dependiente = turno.Dependiente.Nombre,
+                Dependiente = turno.Dependiente.NombreCompleto,
                 Fecha = control.Fecha,
                 Detalles = productos.ToList()
             };

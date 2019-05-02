@@ -27,7 +27,9 @@
                     </td>
                     <td>
                         <a class="btn btn-info" asp-area="admin" asp-action="PasswordReset" asp-route-id="@usuario.Id"><i class="fa fa-pencil"></i></a>
-                        <a asp-action="CambiarRoles" asp-route-id="@usuario.Id" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                        @if(!usuario.Roles.Any(u => u.Nombre == "DEPENDIENTE")){
+                            <a asp-action="CambiarRoles" asp-route-id="@usuario.Id" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                        }
                         @if (usuario.Activo)
                         {
                             <a asp-action="ChangeActive" asp-route-id="@usuario.Id" class="btn btn-danger"><i class="fa fa-trash"></i></a>

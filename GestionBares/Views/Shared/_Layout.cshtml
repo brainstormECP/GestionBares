@@ -139,6 +139,14 @@
                     {
                         @Html.Partial("menus/_DependienteMenu")
                     }
+                    @if (User.IsInRole(DefinicionRoles.Auditor))
+                    {
+                        @Html.Partial("menus/_AuditorMenu")
+                    }
+                    @if (User.IsInRole(DefinicionRoles.AmasB))
+                    {
+                        @Html.Partial("menus/_ABMenu")
+                    }
                 </ul>
             </section>
             <!-- /.sidebar -->

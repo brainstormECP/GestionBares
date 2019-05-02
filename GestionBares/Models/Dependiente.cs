@@ -10,6 +10,7 @@ namespace GestionBares.Models
         public string Nombres { get; set; }
         [Required]
         public string Apellidos { get; set; }
+        public bool Activo { get; set; }
         [NotMapped]
         public string NombreCompleto { get { return Nombres + " " + Apellidos; } }
 

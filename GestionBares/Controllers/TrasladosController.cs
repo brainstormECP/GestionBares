@@ -25,7 +25,11 @@ namespace GestionBares.Controllers
         // GET: Traslados
         public IActionResult Index()
         {
-            var applicationDbContext = _context.Traslados.Include(t => t.Destino).Include(t => t.Turno).Include(t => t.Producto);
+            var applicationDbContext = _context.Traslados
+                .Include(t => t.Destino)
+                .Include(t => t.Turno.Bar)
+                .Include(t => t.Turno.Dependiente)
+                .Include(t => t.Producto);
             return View(applicationDbContext.ToList());
         }
 
@@ -53,9 +57,16 @@ namespace GestionBares.Controllers
         // GET: Traslados/Create
         public IActionResult Create()
         {
-            ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre");
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre");
-            ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio");
+            var dependiente = _context.Set<Dependiente>().SingleOrDefault(u => u.Usuario.UserName == User.Identity.Name);
+            if (!_context.Set<Turno>().Any(t => t.DependienteId == dependiente.Id && t.Activo))
+            {
+                TempData["info"] = "Usted no tiene turno por cerrar, si desea abra uno nuevo.";
+                return RedirectToAction("Nuevo", "Turno");
+            }
+            var turno = _context.Set<Turno>().SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);
+            ViewBag.TurnoId = turno.Id;
+            ViewData["DestinoId"] = new SelectList(_context.Bares.Where(b => b.Id != turno.BarId), "Id", "Nombre");
+            ViewData["ProductoId"] = new SelectList(_context.Productos.Include(p => p.Unidad).Select(p => new { Id = p.Id, Nombre = p.Nombre + " (" + p.Unidad.Nombre + ")" }), "Id", "Nombre");
             return View();
         }
 
@@ -83,7 +94,7 @@ namespace GestionBares.Controllers
             }
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.DestinoId);
             ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", traslado.ProductoId);
-            ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio", traslado.TurnoId);
+            ViewData["TurnoId"] = traslado.TurnoId;
             TempData["error"] = "Error en ralizar esta acción";
             return View(traslado);
         }
@@ -96,14 +107,17 @@ namespace GestionBares.Controllers
                 return NotFound();
             }
 
-            var traslado = _context.Traslados.Find(id);
+            var traslado = _context.Traslados
+                .Include(t => t.Turno.Bar)
+                .Include(t => t.Turno.Dependiente)
+                .FirstOrDefault(t => t.Id == id);
             if (traslado == null)
             {
                 return NotFound();
             }
             ViewData["DestinoId"] = new SelectList(_context.Bares, "Id", "Nombre", traslado.DestinoId);
             ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", traslado.ProductoId);
-            ViewData["TurnoId"] = new SelectList(_context.Turnos, "Id", "FechaInicio", traslado.TurnoId);
+            ViewData["TurnoId"] = traslado.TurnoId;
             return View(traslado);
         }
 
@@ -112,7 +126,7 @@ namespace GestionBares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,ProductoId,Cantidad,DestinoId,TurnoId")] Traslado traslado)
+        public IActionResult Edit(int id, [Bind("Id,ProductoId,Cantidad,DestinoId,TurnoId,UsuarioId,Fecha")] Traslado traslado)
         {
             if (id != traslado.Id)
             {

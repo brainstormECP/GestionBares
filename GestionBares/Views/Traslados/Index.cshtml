@@ -42,6 +42,7 @@
             {
                 <tr>
                     <td>
+                        <span class="hidden">@item.Fecha.Ticks</span>
                         @Html.DisplayFor(modelItem => item.Fecha)
                     </td>
                     <td>
@@ -57,7 +58,7 @@
                         @Html.DisplayFor(modelItem => item.Destino.Nombre)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Usuario.Nombre)
+                        @Html.DisplayFor(modelItem => item.Turno.Dependiente.NombreCompleto)
                     </td>
                     <td class="text-right col-md-3">
                         <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>

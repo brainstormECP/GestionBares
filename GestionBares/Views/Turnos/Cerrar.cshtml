@@ -10,7 +10,7 @@
             <div class="alert alert-info">Esta seguro de cerrar el turno?</div>
             <form asp-action="Cerrar">
                 <div class="form-group col-md-12 text-right">
-                    <input type="hidden" value="@ViewBag.TurnoId" />
+                    <input type="hidden" id="Id" name="Id" value="@ViewBag.TurnoId" />
                     <input type="submit" value="Cerrar" class="btn btn-danger" />
                 </div>
             </form>

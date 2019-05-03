@@ -11,6 +11,6 @@ namespace GestionBares.Models
         public int ProductoId { get; set; }
         public virtual Producto Producto { get; set; }
         public double Cantidad { get; set; }
-        public bool Atendido { get; set; }
+        public decimal Importe { get; set; }
     }
 }

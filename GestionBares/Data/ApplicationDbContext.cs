@@ -58,6 +58,9 @@ namespace GestionBares.Data
         public DbSet<Standard> Standards { get; set; }
         public DbSet<StandardVenta> StandardVentas { get; set; }
         public DbSet<DependienteBar> DependientesBares { get; set; }
+        public DbSet<Venta> Ventas { get; set; }
+        public DbSet<DetalleVenta> DetallesVentas { get; set; }
+
 
     }
 }

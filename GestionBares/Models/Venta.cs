@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GestionBares.Models
 {
@@ -10,6 +11,7 @@ namespace GestionBares.Models
         public int TurnoId { get; set; }
         public virtual Turno Turno { get; set; }
         public virtual ICollection<DetalleVenta> Detalles { get; set; }
+        public decimal Importe { get => Detalles.Sum(d => d.Importe); }
         public Venta()
         {
             Detalles = new HashSet<DetalleVenta>();

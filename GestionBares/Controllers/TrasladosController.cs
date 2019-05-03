@@ -9,6 +9,7 @@ using GestionBares.Data;
 using GestionBares.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using GestionBares.Utils;
 
 namespace GestionBares.Controllers
 {
@@ -25,12 +26,24 @@ namespace GestionBares.Controllers
         // GET: Traslados
         public IActionResult Index()
         {
-            var applicationDbContext = _context.Traslados
+            var traslados = _context.Traslados
                 .Include(t => t.Destino)
                 .Include(t => t.Turno.Bar)
                 .Include(t => t.Turno.Dependiente)
-                .Include(t => t.Producto);
-            return View(applicationDbContext.ToList());
+                .Include(t => t.Producto)
+                .ToList();
+            if (User.IsInRole(DefinicionRoles.Dependiente))
+            {
+                var dependiente = _context.Set<Dependiente>().SingleOrDefault(u => u.Usuario.UserName == User.Identity.Name);
+                if (!_context.Set<Turno>().Any(t => t.DependienteId == dependiente.Id && t.Activo))
+                {
+                    TempData["info"] = "Usted no tiene turno abierto.";
+                    return RedirectToAction("Nuevo", "Turno");
+                }
+                var turno = _context.Set<Turno>().SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);
+                traslados = traslados.Where(t => t.TurnoId == turno.Id).ToList();
+            }
+            return View(traslados);
         }
 
         // GET: Traslados/Details/5
@@ -60,7 +73,7 @@ namespace GestionBares.Controllers
             var dependiente = _context.Set<Dependiente>().SingleOrDefault(u => u.Usuario.UserName == User.Identity.Name);
             if (!_context.Set<Turno>().Any(t => t.DependienteId == dependiente.Id && t.Activo))
             {
-                TempData["info"] = "Usted no tiene turno por cerrar, si desea abra uno nuevo.";
+                TempData["info"] = "Usted no tiene turno abierto.";
                 return RedirectToAction("Nuevo", "Turno");
             }
             var turno = _context.Set<Turno>().SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);

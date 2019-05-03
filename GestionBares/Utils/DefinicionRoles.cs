@@ -4,8 +4,7 @@ namespace GestionBares.Utils
     {
         public const string Administrador = "ADMINISTRADOR";
         public const string Dependiente = "DEPENDIENTE";
-        public const string Almacen = "ALMACEN";
-        public const string Economia = "ECONOMIA";
-        public const string AplusB = "A+B";
+        public const string Auditor = "AUDITOR";
+        public const string AmasB = "A+B";
     }
 }

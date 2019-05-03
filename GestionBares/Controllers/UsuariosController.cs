@@ -11,6 +11,7 @@ using GestionBares.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using GestionBares.Utils;
 
 namespace GestionBares.Controllers
 {
@@ -127,7 +128,7 @@ namespace GestionBares.Controllers
                     Nombre = r.Name
                 }).ToList(),
             };
-            ViewBag.RolesIds = new MultiSelectList(roles, "Id", "Name");
+            ViewBag.RolesIds = new MultiSelectList(roles.Where(r => r.Name != DefinicionRoles.Dependiente), "Id", "Name", data.Roles.Select(r => r.Id).ToList());
             return View(data);
         }
 
@@ -156,7 +157,7 @@ namespace GestionBares.Controllers
         public async Task<IActionResult> Nuevo()
         {
             var roles = _db.Set<IdentityRole>();
-            ViewBag.RolesIds = new MultiSelectList(roles, "Name", "Name");
+            ViewBag.RolesIds = new MultiSelectList(roles.Where(r => r.Name != DefinicionRoles.Dependiente), "Name", "Name");
             return View();
         }
 

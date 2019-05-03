@@ -11,7 +11,7 @@
 <div>
     <div>
         <div class="container-fluid">
-            <h3>Modificar Turno</h3>
+            <h3>Seleccionar bares</h3>
             <hr />
 
             <form asp-action="SeleccionBares">
@@ -19,7 +19,7 @@
                 <input asp-for="DependienteId" class="form-control" type="hidden" />
                 <div class="row">
                 <div class="form-group col-md-4">
-                    <h3>@Model.Dependiente.Nombre</h3>
+                    <h3>@Model.Dependiente.NombreCompleto</h3>
                 </div>
                 </div>
                 <div class="row">

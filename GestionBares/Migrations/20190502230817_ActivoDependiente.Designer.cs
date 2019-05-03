@@ -4,14 +4,16 @@ using GestionBares.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestionBares.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190502230817_ActivoDependiente")]
+    partial class ActivoDependiente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,40 +126,17 @@ namespace GestionBares.Migrations
 
                     b.Property<double>("Cantidad");
 
-                    b.Property<int>("PedidoId");
+                    b.Property<int?>("PedidoAlmacenId");
 
                     b.Property<int>("ProductoId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PedidoId");
+                    b.HasIndex("PedidoAlmacenId");
 
                     b.HasIndex("ProductoId");
 
                     b.ToTable("DetallesPedidosDeAlmacen");
-                });
-
-            modelBuilder.Entity("GestionBares.Models.DetalleVenta", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<double>("Cantidad");
-
-                    b.Property<decimal>("Importe");
-
-                    b.Property<int>("ProductoId");
-
-                    b.Property<int>("VentaId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductoId");
-
-                    b.HasIndex("VentaId");
-
-                    b.ToTable("DetallesVentas");
                 });
 
             modelBuilder.Entity("GestionBares.Models.EntregaDeAlmacen", b =>
@@ -345,23 +324,6 @@ namespace GestionBares.Migrations
                     b.ToTable("UnidadesDeMedidas");
                 });
 
-            modelBuilder.Entity("GestionBares.Models.Venta", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Fecha");
-
-                    b.Property<int>("TurnoId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TurnoId");
-
-                    b.ToTable("Ventas");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -386,10 +348,10 @@ namespace GestionBares.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "1", ConcurrencyStamp = "19b5717a-4a01-437d-9cd5-4e72cf8dad37", Name = "ADMINISTRADOR", NormalizedName = "ADMINISTRADOR" },
-                        new { Id = "2", ConcurrencyStamp = "d7535852-9341-482f-a655-5d81425d3550", Name = "DEPENDIENTE", NormalizedName = "DEPENDIENTE" },
-                        new { Id = "3", ConcurrencyStamp = "a651a587-22c9-47b7-ae0d-10c8679a5a51", Name = "AUDITOR", NormalizedName = "AUDITOR" },
-                        new { Id = "4", ConcurrencyStamp = "6cf75d47-64aa-4bad-b65c-52855adadbba", Name = "A+B", NormalizedName = "A+B" }
+                        new { Id = "1", ConcurrencyStamp = "d6a67ca5-6f23-4120-bde2-59b69fbac0d5", Name = "ADMINISTRADOR", NormalizedName = "ADMINISTRADOR" },
+                        new { Id = "2", ConcurrencyStamp = "1ba0a0bd-7eb0-4e5f-a4c6-d8f07a777cf3", Name = "DEPENDIENTE", NormalizedName = "DEPENDIENTE" },
+                        new { Id = "3", ConcurrencyStamp = "6a289b72-d0c8-4d6a-9b5f-dc7dad3bf03c", Name = "AUDITOR", NormalizedName = "AUDITOR" },
+                        new { Id = "4", ConcurrencyStamp = "9b5a0b6d-e6d4-4bb6-b46b-69cc1c9c69dd", Name = "A+B", NormalizedName = "A+B" }
                     );
                 });
 
@@ -599,27 +561,13 @@ namespace GestionBares.Migrations
 
             modelBuilder.Entity("GestionBares.Models.DetallePedidoAlmacen", b =>
                 {
-                    b.HasOne("GestionBares.Models.PedidoAlmacen", "Pedido")
+                    b.HasOne("GestionBares.Models.PedidoAlmacen")
                         .WithMany("Detalles")
-                        .HasForeignKey("PedidoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PedidoAlmacenId");
 
                     b.HasOne("GestionBares.Models.Producto", "Producto")
                         .WithMany()
                         .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("GestionBares.Models.DetalleVenta", b =>
-                {
-                    b.HasOne("GestionBares.Models.Producto", "Producto")
-                        .WithMany()
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("GestionBares.Models.Venta", "Venta")
-                        .WithMany("Detalles")
-                        .HasForeignKey("VentaId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -715,14 +663,6 @@ namespace GestionBares.Migrations
                     b.HasOne("GestionBares.Models.Dependiente", "Dependiente")
                         .WithMany()
                         .HasForeignKey("DependienteId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("GestionBares.Models.Venta", b =>
-                {
-                    b.HasOne("GestionBares.Models.Turno", "Turno")
-                        .WithMany()
-                        .HasForeignKey("TurnoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -2,11 +2,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GestionBares.Models
 {
-    public class DetallePedidoAlmacen
+    public class DetalleVenta
     {
         public int Id { get; set; }
-        public int PedidoId { get; set; }
-        public virtual PedidoAlmacen Pedido { get; set; }
+        public int VentaId { get; set; }
+        public virtual Venta Venta { get; set; }
         [Display(Name = "Producto")]
         public int ProductoId { get; set; }
         public virtual Producto Producto { get; set; }

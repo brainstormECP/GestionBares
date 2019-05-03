@@ -1,7 +1,7 @@
-﻿@model GestionBares.Models.Traslado
+﻿@model GestionBares.Models.EntregaDeAlmacen
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nueva";
 }
 
 
@@ -13,12 +13,6 @@
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="TurnoId" value="@ViewBag.TurnoId" />
-                <div class="row">
-                <div class="form-group col-md-4">
-                    <label asp-for="DestinoId" class="control-label"></label>
-                    <select asp-for="DestinoId" class="form-control" asp-items="ViewBag.DestinoId"></select>
-                </div>
-                </div>
                 <div class="row">
 
                 <div class="form-group col-md-4">

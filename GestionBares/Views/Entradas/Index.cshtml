@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GestionBares.Models.Traslado>
+﻿@model IEnumerable<GestionBares.Models.EntregaDeAlmacen>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,18 +9,15 @@
 }
 
 <div class="container-fluid">
-    <h3>Listado de Traslados</h3>
+    <h3>Listado de entradas de almacen</h3>
     <hr />
 
     <p>
-        <a class="btn btn-success" asp-action="Create">Nuevo Traslado</a>
+        <a class="btn btn-success" asp-action="Create">Nueva entrada</a>
     </p>
     <table class="table dynamic">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Fecha)
-                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Producto)
                 </th>
@@ -28,10 +25,7 @@
                     @Html.DisplayNameFor(model => model.Cantidad)
                 </th>
                 <th>
-                    Origen
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Destino)
+                    Bar
                 </th>
                 <th>Efectuado Por</th>
                 <th></th>
@@ -40,11 +34,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        <span class="hidden">@item.Fecha.Ticks</span>
-                        @Html.DisplayFor(modelItem => item.Fecha)
-                    </td>
+                <tr>                   
                     <td>
                         @Html.DisplayFor(modelItem => item.Producto.Nombre)
                     </td>
@@ -53,10 +43,7 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Turno.Bar.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Destino.Nombre)
-                    </td>
+                    </td>                   
                     <td>
                         @Html.DisplayFor(modelItem => item.Turno.Dependiente.NombreCompleto)
                     </td>

@@ -151,5 +151,19 @@ namespace GestionBares.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult Sugerencias()
+        {
+            var dependiente = _context.Set<Dependiente>().SingleOrDefault(u => u.Usuario.UserName == User.Identity.Name);
+            if (!_context.Set<Turno>().Any(t => t.DependienteId == dependiente.Id && t.Activo))
+            {
+                TempData["info"] = "Usted no tiene turno abierto.";
+                return RedirectToAction("Nuevo", "Turno");
+            }
+            var turno = _context.Set<Turno>().SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);
+            ViewBag.TurnoId = turno.Id;
+
+            return View();
+        }
     }
 }

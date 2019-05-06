@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GestionBares.Models.Producto>
+﻿@model IEnumerable<GestionBares.Models.PedidoAlmacenVenta>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,32 +9,23 @@
 }
 
 <div class="container-fluid">
-    <h3>Listado de Productos</h3>
+    <h3>Listado de pedidos a almacen</h3>
     <hr />
 
     <p>
-        <a class="btn btn-success" asp-action="Create">Nuevo Producto</a>
+        <a class="btn btn-success" asp-action="Nuevo">Nueva Pedido</a>
     </p>
     <table class="table dynamic">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Codigo)
+                    Fecha
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Nombre)
+                    @Html.DisplayNameFor(model => model.Turno.Dependiente)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Unidad)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Familia)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Precio)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Costo)
+                    @Html.DisplayNameFor(model => model.Turno.Bar)
                 </th>
                 <th></th>
             </tr>
@@ -44,20 +35,16 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Nombre)
+                        <span class="hidden">@item.Turno.FechaInicio.Ticks</span>
+                        @Html.DisplayFor(modelItem => item.Turno.FechaInicio)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Unidad.Nombre)
+                        @Html.DisplayFor(modelItem => item.Turno.Dependiente.NombreCompleto)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Familia.Nombre)
+                        @Html.DisplayFor(modelItem => item.Turno.Bar.Nombre)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Precio)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Costo)
-                    </td>
+                    
                     <td class="text-right col-md-3">
                         <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
                         <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>

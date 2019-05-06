@@ -16,6 +16,7 @@ namespace GestionBares.Models
         [Display(Name = "Familia")]
         public int FamiliaId { get; set; }
         public virtual FamiliaDeProducto Familia { get; set; }
-        public double LimiteParaSolicitar { get; set; }
+        public decimal Precio { get; set; }
+        public decimal Costo { get; set; }
     }
 }

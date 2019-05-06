@@ -19,7 +19,9 @@ namespace GestionBares.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Traslado>().HasOne(t => t.Turno).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<TrasladoVenta>().HasOne(t => t.Turno).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Traslado>().HasOne(t => t.Destino).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<TrasladoVenta>().HasOne(t => t.Destino).WithMany().OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole[] {
                 new IdentityRole {Id = "1", Name = DefinicionRoles.Administrador, NormalizedName = DefinicionRoles.Administrador },
@@ -58,9 +60,11 @@ namespace GestionBares.Data
         public DbSet<Standard> Standards { get; set; }
         public DbSet<StandardVenta> StandardVentas { get; set; }
         public DbSet<DependienteBar> DependientesBares { get; set; }
-        public DbSet<Venta> Ventas { get; set; }
-        public DbSet<DetalleVenta> DetallesVentas { get; set; }
-
-
+        public DbSet<EntregaDeAlmacenVenta> EntregasDeAlmacenVenta { get; set; }
+        public DbSet<PedidoAlmacenVenta> PedidosDeAlmacenVenta { get; set; }
+        public DbSet<DetallePedidoAlmacenVenta> DetallesPedidosDeAlmacenVenta { get; set; }
+        public DbSet<TrasladoVenta> TrasladosVenta { get; set; }
+        public DbSet<ControlExistenciaVenta> ControlesDeExistenciasVenta { get; set; }
+        public DbSet<DetalleControlExistenciaVenta> DetallesControlesDeExistenciasVenta { get; set; }
     }
 }

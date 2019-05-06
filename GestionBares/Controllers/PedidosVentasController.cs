@@ -14,11 +14,11 @@ using GestionBares.Utils;
 namespace GestionBares.Controllers
 {
     [Authorize]
-    public class VentasController : Controller
+    public class PedidosVentasController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public VentasController(ApplicationDbContext context)
+        public PedidosVentasController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -26,7 +26,7 @@ namespace GestionBares.Controllers
         // GET: Traslados
         public IActionResult Index()
         {
-            var ventas = _context.Set<Venta>()
+            var pedidos = _context.Set<PedidoAlmacenVenta>()
                 .Include(t => t.Turno.Bar)
                 .Include(t => t.Turno.Dependiente)
                 .Include(t => t.Detalles).ThenInclude(d => d.Producto)
@@ -40,9 +40,9 @@ namespace GestionBares.Controllers
                     return RedirectToAction("Nuevo", "Turno");
                 }
                 var turno = _context.Set<Turno>().SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);
-                ventas = ventas.Where(t => t.TurnoId == turno.Id).ToList();
+                pedidos = pedidos.Where(t => t.TurnoId == turno.Id).ToList();
             }
-            return View(ventas);
+            return View(pedidos);
         }
 
         // GET: Traslados/Details/5
@@ -53,7 +53,7 @@ namespace GestionBares.Controllers
                 return NotFound();
             }
 
-            var traslado = _context.Ventas
+            var traslado = _context.PedidosDeAlmacenVenta
                         .Include(t => t.Turno.Bar)
                         .Include(t => t.Turno.Dependiente)
                         .Include(t => t.Detalles).ThenInclude(d => d.Producto)
@@ -77,10 +77,10 @@ namespace GestionBares.Controllers
             }
             var turno = _context.Set<Turno>().SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);
             ViewBag.TurnoId = turno.Id;
-            var venta = new Venta { TurnoId = turno.Id, Fecha = DateTime.Now };
-            _context.Add(venta);
+            var pedido = new PedidoAlmacenVenta { TurnoId = turno.Id };
+            _context.Add(pedido);
             _context.SaveChanges();
-            return RedirectToAction(nameof(Edit), new { Id = venta.Id });
+            return RedirectToAction(nameof(Edit), new { Id = pedido.Id });
         }
 
         // GET: Traslados/Edit/5
@@ -91,7 +91,7 @@ namespace GestionBares.Controllers
                 return NotFound();
             }
 
-            var venta = _context.Ventas
+            var venta = _context.PedidosDeAlmacenVenta
                 .Include(t => t.Turno.Bar)
                 .Include(t => t.Turno.Dependiente)
                 .Include(t => t.Detalles).ThenInclude(t => t.Producto)
@@ -106,7 +106,7 @@ namespace GestionBares.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AgregarDetalle([Bind("VentaId,ProductoId,Cantidad,Importe")] DetalleVenta detalle)
+        public IActionResult AgregarDetalle([Bind("PedidoId,ProductoId,Cantidad")] DetallePedidoAlmacenVenta detalle)
         {
             if (ModelState.IsValid)
             {
@@ -114,14 +114,14 @@ namespace GestionBares.Controllers
                 _context.SaveChanges();
                 TempData["exito"] = "La acción se ha realizado correctamente";
             }
-            return RedirectToAction(nameof(Edit), new { Id = detalle.VentaId });
+            return RedirectToAction(nameof(Edit), new { Id = detalle.PedidoId });
         }
 
         public IActionResult EliminarDetalle(int id)
         {
-            var detalle = _context.DetallesVentas.Find(id);
-            var ventaId = detalle.VentaId;
-            _context.DetallesVentas.Remove(detalle);
+            var detalle = _context.DetallesPedidosDeAlmacenVenta.Find(id);
+            var pedidoId = detalle.PedidoId;
+            _context.Remove(detalle);
             try
             {
                 _context.SaveChanges();
@@ -132,13 +132,13 @@ namespace GestionBares.Controllers
                 TempData["error"] = "Error en ralizar esta acción";
                 throw;
             }
-            return RedirectToAction(nameof(Edit), new { Id = ventaId });
+            return RedirectToAction(nameof(Edit), new { Id = pedidoId });
         }
 
         public IActionResult Eliminar(int id)
         {
-            var venta = _context.Ventas.Find(id);
-            _context.Ventas.Remove(venta);
+            var pedido = _context.PedidosDeAlmacenVenta.Find(id);
+            _context.PedidosDeAlmacenVenta.Remove(pedido);
             try
             {
                 _context.SaveChanges();
@@ -150,6 +150,20 @@ namespace GestionBares.Controllers
                 throw;
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Sugerencias()
+        {
+            var dependiente = _context.Set<Dependiente>().SingleOrDefault(u => u.Usuario.UserName == User.Identity.Name);
+            if (!_context.Set<Turno>().Any(t => t.DependienteId == dependiente.Id && t.Activo))
+            {
+                TempData["info"] = "Usted no tiene turno abierto.";
+                return RedirectToAction("Nuevo", "Turno");
+            }
+            var turno = _context.Set<Turno>().SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);
+            ViewBag.TurnoId = turno.Id;
+
+            return View();
         }
     }
 }

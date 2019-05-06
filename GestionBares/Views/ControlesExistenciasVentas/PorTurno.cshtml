@@ -1,0 +1,61 @@
+﻿@model GestionBares.ViewModels.ControlExistenciaVM
+
+@{
+    ViewData["Title"] = "Existencias";
+}
+@section styles{
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+}
+
+<div class="container-fluid">
+    <h3>Listado de Existencias del Bar: @Model.Bar</h3>
+    <h4>Confeccionado por: @Model.Dependiente en la fecha: @Model.Fecha</h4>
+    <hr />
+    <div class="col-md-12">
+        <form asp-action="PorTurno" method="POST" class="form-inline" role="form">
+            <input type="hidden" asp-for="Id"/>
+            <div class="row">
+                <div class="form-group">
+                    <table class="table dynamic">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Unidad</th>
+                                <th>Anterior</th>                
+                                <th>Cantidad</th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Detalles.Count;i++)
+                            {
+                                <tr>
+                                    <td>@Model.Detalles[i].Producto</td>
+                                    <td>@Model.Detalles[i].Unidad</td>
+                                    <td>@Model.Detalles[i].CantidadAnterior</td>
+                                    <td>
+                                        <input type="hidden" name="Detalles[@i].ProductoId" value="@Model.Detalles[i].ProductoId" />
+                                        <input class="form-control" name="Detalles[@i].Cantidad" value="@Model.Detalles[i].Cantidad" />
+                                    </td>                                    
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>                
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <a asp-action="Index" class="btn btn-default">Atras</a>
+        </form>
+    </div>
+    <div class="col-md-12">
+        
+    </div>
+</div>
+@section scripts{
+    <script src="~/js/datatables.min.js"></script>
+    <script src="~/js/mbs-qdtf.js"></script>
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+}

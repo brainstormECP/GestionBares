@@ -31,7 +31,10 @@
                     @Html.DisplayNameFor(model => model.Familia)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.LimiteParaSolicitar)
+                    @Html.DisplayNameFor(model => model.Precio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Costo)
                 </th>
                 <th></th>
             </tr>
@@ -50,7 +53,10 @@
                         @Html.DisplayFor(modelItem => item.Familia.Nombre)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.LimiteParaSolicitar)
+                        @Html.DisplayFor(modelItem => item.Precio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Costo)
                     </td>
                     <td class="text-right col-md-3">
                         <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>

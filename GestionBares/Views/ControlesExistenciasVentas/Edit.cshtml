@@ -1,0 +1,44 @@
+﻿@model GestionBares.Models.ControlExistenciaVenta
+
+@{
+    ViewData["Title"] = "Agregar productos";
+}
+
+
+<div class="container-fluid">
+    <h3>Agregar productos a Control Existencia</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Control de existencia con fecha @Model.Fecha, Dependiente: @Model.Turno.Dependiente.NombreCompleto en Bar: @Model.Turno.Bar.Nombre</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="AgregarProducto" data-ajax="true" class="form form-inline">
+                <input type="hidden" name="controlId" id="controlId" value="@Model.Id" />
+                 <div class="form-group col-md-4">
+                    <label class="control-label">Producto</label>
+                    <select id="productoId" name="productoId" class="form-control select" asp-items="ViewBag.Productos"></select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Cantidad</label>
+                    <input id="cantidad" name="cantidad" class="form-control"/>
+                </div>
+                <div class="form-group col-md-4 text-right">
+                    <button class="btn btn-success"><i class="fa fa-plus"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div id="productos" class="col-md-12">
+            @Html.Partial("_DetallesControlPartial",Model.Detalles)
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

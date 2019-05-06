@@ -1,0 +1,25 @@
+﻿@model IEnumerable<GestionBares.Models.DetalleControlExistenciaVenta>
+
+    <table class="table dynamic">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>               
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Producto.Nombre)
+                    </td>
+                    <td>@item.Cantidad</td>
+                    <td class="text-right col-md-3">                        
+                        <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="QuitarDetalle" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

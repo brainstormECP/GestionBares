@@ -114,8 +114,11 @@ namespace GestionBares.Controllers
                 return NotFound();
             }
             var existenciaAnterior = _context.Set<ControlExistencia>()
+                .Include(c => c.Turno)
                 .Any(d => d.Turno.BarId == control.Turno.BarId && d.Id != control.Id && d.Fecha < control.Fecha) ?
                 _context.Set<ControlExistencia>()
+                .Include(c => c.Turno)
+                .Include(c => c.Detalles)
                 .Where(d => d.Turno.BarId == control.Turno.BarId && d.Id != control.Id && d.Fecha < control.Fecha)
                 .OrderBy(d => d.Fecha)
                 .Last().Detalles
@@ -194,8 +197,11 @@ namespace GestionBares.Controllers
                 _context.SaveChanges();
             }
             var existenciaAnterior = _context.Set<ControlExistencia>()
+                .Include(c => c.Turno)
                 .Any(d => !d.Activo && d.Turno.BarId == turno.BarId) ?
                 _context.Set<ControlExistencia>()
+                .Include(c => c.Turno)
+                .Include(c => c.Detalles)
                 .Where(d => !d.Activo && d.Turno.BarId == turno.BarId)
                 .OrderBy(d => d.Fecha)
                 .Last().Detalles

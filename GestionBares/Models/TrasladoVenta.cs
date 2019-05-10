@@ -18,6 +18,7 @@ namespace GestionBares.Models
         [Display(Name = "Destino")]
         public int DestinoId { get; set; }
         public virtual Bar Destino { get; set; }
+        public bool Aprobado { get; set; }
 
         public string UsuarioId { get; set; }
         public virtual Usuario Usuario { get; set; }

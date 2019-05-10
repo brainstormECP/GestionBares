@@ -46,5 +46,30 @@ namespace GestionBares.Controllers
             ViewBag.Fecha = turno.FechaInicio;
             return View(data);
         }
+
+        public IActionResult Ventas()
+        {
+            if (User.IsInRole(DefinicionRoles.Dependiente))
+            {
+                var dependiente = _context.Set<Dependiente>().SingleOrDefault(d => d.Usuario.UserName == User.Identity.Name);
+                var turno = _context.Set<Turno>().SingleOrDefault(t => t.Activo && t.DependienteId == dependiente.Id);
+                if (turno == null)
+                {
+                    return RedirectToAction("Nuevo", "Turnos");
+                }
+                return RedirectToAction(nameof(VentasEnTurno), new { Id = turno.Id });
+            }
+            return View();
+        }
+        // GET: ControlesExistencias
+        public IActionResult VentasEnTurno(int id)
+        {
+            var turno = _context.Set<Turno>().Include(t => t.Bar).SingleOrDefault(t => t.Id == id);
+            var es = new ExistenciasService(_context);
+            var data = es.ExistenciaVentaDeBarPorTurno(id);
+            ViewBag.Bar = turno.Bar.Nombre;
+            ViewBag.Fecha = turno.FechaInicio;
+            return View(data);
+        }
     }
 }

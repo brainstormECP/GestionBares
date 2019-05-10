@@ -126,7 +126,9 @@ namespace GestionBares.Controllers
                 })
                 .ToList() : new List<DetalleExistenciaVM>();
             var productos = _context.Set<Producto>()
-                .Where(p => _context.Set<Standard>().Any(s => s.ProductoId == p.Id && s.BarId == control.Turno.BarId) || _context.Set<StandardVenta>().Any(s => s.ProductoId == p.Id && s.BarId == control.Turno.BarId))
+                .Where(p => _context.Set<StandardVenta>()
+                    .Any(s => s.ProductoId == p.Id && s.BarId == control.Turno.BarId)
+                    || (existenciaAnterior.Any(e => e.ProductoId == p.Id) ? existenciaAnterior.SingleOrDefault(e => e.ProductoId == p.Id).Cantidad : 0) > 0)
                 .Select(p => new DetalleExistenciaVM
                 {
                     ProductoId = p.Id,
@@ -193,39 +195,7 @@ namespace GestionBares.Controllers
                 _context.Add(control);
                 _context.SaveChanges();
             }
-            var existenciaAnterior = _context.Set<ControlExistenciaVenta>()
-                .Any(d => !d.Activo && d.Turno.BarId == turno.BarId) ?
-                _context.Set<ControlExistenciaVenta>()
-                .Where(d => !d.Activo && d.Turno.BarId == turno.BarId)
-                .OrderBy(d => d.Fecha)
-                .Last().Detalles
-                .Select(d => new DetalleExistenciaVM
-                {
-                    ProductoId = d.ProductoId,
-                    Cantidad = d.Cantidad
-                })
-                .ToList() : new List<DetalleExistenciaVM>();
-            var productos = _context.Set<Producto>()
-                .Where(p => _context.Set<Standard>().Any(s => s.ProductoId == p.Id && s.BarId == turno.BarId) || _context.Set<StandardVenta>().Any(s => s.ProductoId == p.Id && s.BarId == turno.BarId))
-                .Select(p => new DetalleExistenciaVM
-                {
-                    ProductoId = p.Id,
-                    Producto = p.Nombre,
-                    Unidad = p.Unidad.Nombre,
-                    Cantidad = _context.Set<DetalleControlExistenciaVenta>().Any(d => d.ControlId == control.Id && d.ProductoId == p.Id) ? _context.Set<DetalleControlExistenciaVenta>().SingleOrDefault(d => d.ControlId == control.Id && d.ProductoId == p.Id).Cantidad : 0,
-                    CantidadAnterior = existenciaAnterior.Any(e => e.ProductoId == p.Id) ? existenciaAnterior.SingleOrDefault(e => e.ProductoId == p.Id).Cantidad : 0,
-                });
-            var data = new ControlExistenciaVM
-            {
-                Id = control.Id,
-                TurnoId = turno.Id,
-                Bar = turno.Bar.Nombre,
-                Dependiente = turno.Dependiente.NombreCompleto,
-                Fecha = control.Fecha,
-                Detalles = productos.ToList()
-            };
-            //agregar solo productos del bar del turno            
-            return View(data);
+            return RedirectToAction(nameof(Edit), new { Id = control.Id });
         }
 
         [HttpPost]

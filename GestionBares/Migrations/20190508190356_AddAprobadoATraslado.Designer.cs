@@ -4,14 +4,16 @@ using GestionBares.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestionBares.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190508190356_AddAprobadoATraslado")]
+    partial class AddAprobadoATraslado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -392,8 +394,6 @@ namespace GestionBares.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Aprobado");
-
                     b.Property<double>("Cantidad");
 
                     b.Property<int>("DestinoId");
@@ -482,10 +482,10 @@ namespace GestionBares.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "1", ConcurrencyStamp = "a4de5bff-93f8-48fa-b1f7-e0a9bde2931c", Name = "ADMINISTRADOR", NormalizedName = "ADMINISTRADOR" },
-                        new { Id = "2", ConcurrencyStamp = "350d1d46-990f-4fab-af3c-f8765630b912", Name = "DEPENDIENTE", NormalizedName = "DEPENDIENTE" },
-                        new { Id = "3", ConcurrencyStamp = "a3ab6f8f-1595-46d9-90a8-89c86a33d399", Name = "AUDITOR", NormalizedName = "AUDITOR" },
-                        new { Id = "4", ConcurrencyStamp = "9d2a2430-9f54-4801-8eb0-18d995b8d829", Name = "A+B", NormalizedName = "A+B" }
+                        new { Id = "1", ConcurrencyStamp = "7e05f4be-aed9-4e38-aeb3-a3f720c093e1", Name = "ADMINISTRADOR", NormalizedName = "ADMINISTRADOR" },
+                        new { Id = "2", ConcurrencyStamp = "ec9c4da8-31a5-48cd-a683-6ecd547a4edc", Name = "DEPENDIENTE", NormalizedName = "DEPENDIENTE" },
+                        new { Id = "3", ConcurrencyStamp = "1e624af6-988e-4f66-ad00-e841d22156df", Name = "AUDITOR", NormalizedName = "AUDITOR" },
+                        new { Id = "4", ConcurrencyStamp = "a8962e98-4b6e-4bb4-8551-e713f8b7a888", Name = "A+B", NormalizedName = "A+B" }
                     );
                 });
 

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<GestionBares.ViewModels.MovimientoVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@section styles{
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+}
+
+<div class="container-fluid">
+    <h3>Ventas en bar con @ViewBag.Bar fecha: @ViewBag.Fecha.ToShortDateString() </h3>
+    <hr />
+    <table class="table dynamic">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Producto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inicio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Entradas)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Enviados)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Recibidos)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fin)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Consumo)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Producto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inicio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Entradas)
+                    </td>                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Enviados)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Recibidos)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fin)
+                    </td>                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Consumo)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    <script src="~/js/datatables.min.js"></script>
+    <script src="~/js/mbs-qdtf.js"></script>
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+}

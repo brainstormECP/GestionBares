@@ -29,8 +29,10 @@ namespace GestionBares.Utils
             var turnoAnterior = _db.Set<Turno>().Where(t => t.Id != turnoId && t.BarId == turno.BarId).OrderBy(t => t.FechaFin).Last();
             var result = new List<MovimientoVM>();
             var ultimoControl = _db.Set<ControlExistencia>()
+                .Any(c => c.TurnoId == turnoAnterior.Id) ? _db.Set<ControlExistencia>()
                 .Include(c => c.Detalles).ThenInclude(c => c.Producto)
-                .Where(c => c.TurnoId == turnoAnterior.Id).OrderBy(c => c.Fecha).Last();
+                .Where(c => c.TurnoId == turnoAnterior.Id).OrderBy(c => c.Fecha).Last() : null;
+            if (ultimoControl == null) return new List<MovimientoVM>();
             foreach (var detalle in ultimoControl.Detalles)
             {
                 result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Inicio = detalle.Cantidad });
@@ -78,18 +80,22 @@ namespace GestionBares.Utils
                 }
             }
             var control = _db.Set<ControlExistencia>()
+                .Any(c => c.TurnoId == turno.Id) ? _db.Set<ControlExistencia>()
                 .Include(c => c.Detalles).ThenInclude(c => c.Producto)
-                .Where(c => c.TurnoId == turno.Id).OrderBy(c => c.Fecha).Last();
-            foreach (var detalle in control.Detalles)
+                .Where(c => c.TurnoId == turno.Id).OrderBy(c => c.Fecha).Last() : null;
+            if (control != null)
             {
-                if (result.Any(r => r.ProductoId == detalle.ProductoId))
+                foreach (var detalle in control.Detalles)
                 {
-                    var data = result.FirstOrDefault(r => r.ProductoId == detalle.ProductoId);
-                    data.Fin = detalle.Cantidad;
-                }
-                else
-                {
-                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Fin = detalle.Cantidad });
+                    if (result.Any(r => r.ProductoId == detalle.ProductoId))
+                    {
+                        var data = result.FirstOrDefault(r => r.ProductoId == detalle.ProductoId);
+                        data.Fin = detalle.Cantidad;
+                    }
+                    else
+                    {
+                        result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Fin = detalle.Cantidad });
+                    }
                 }
             }
             return result;

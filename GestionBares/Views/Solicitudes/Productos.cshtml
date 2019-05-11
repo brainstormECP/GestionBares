@@ -1,0 +1,64 @@
+﻿@model IEnumerable<GestionBares.ViewModels.SolicitudVM>
+
+@{
+    ViewData["Title"] = "Solicitudes";
+}
+@section styles{
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+}
+
+<div class="container-fluid">
+    <h3>Listado de solicitudes</h3>
+    <hr />
+
+    <table class="table dynamic">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Producto)
+                </th> 
+                <th>@Html.DisplayNameFor(model => model.Bar)</th>
+                <th>@Html.DisplayNameFor(model => model.Cantidad)</th>
+                <th>En Almacen</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Producto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bar)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cantidad)
+                    </td>
+                
+                @{
+                            var clase = "";
+                            if (item.Cantidad > item.EnAlmacen) {clase = "danger";}
+                            else {clase = "success";}
+                        }
+                    <td class="bg bg-@clase">                        
+                        <span >@item.EnAlmacen</span>
+                    </td>
+                    <td class="text-right col-md-3">
+                        <a data-hint="Atender" class="btn btn-primary btn-sm atender hint--top hint--success" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Atender" asp-route-id="@item.Id"><span class="fa fa-check" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    <script src="~/js/datatables.min.js"></script>
+    <script src="~/js/mbs-qdtf.js"></script>
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+}

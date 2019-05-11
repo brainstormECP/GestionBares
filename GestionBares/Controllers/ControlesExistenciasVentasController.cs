@@ -114,8 +114,11 @@ namespace GestionBares.Controllers
                 return NotFound();
             }
             var existenciaAnterior = _context.Set<ControlExistenciaVenta>()
+                .Include(c => c.Turno)
                 .Any(d => d.Turno.BarId == control.Turno.BarId && d.Id != control.Id && d.Fecha < control.Fecha) ?
                 _context.Set<ControlExistenciaVenta>()
+                .Include(c => c.Turno)
+                .Include(c => c.Detalles)
                 .Where(d => d.Turno.BarId == control.Turno.BarId && d.Id != control.Id && d.Fecha < control.Fecha)
                 .OrderBy(d => d.Fecha)
                 .Last().Detalles
@@ -134,7 +137,7 @@ namespace GestionBares.Controllers
                     ProductoId = p.Id,
                     Producto = p.Nombre,
                     Unidad = p.Unidad.Nombre,
-                    Cantidad = _context.Set<DetalleControlExistenciaVenta>().Any(d => d.ControlId == control.Id && d.ProductoId == p.Id) ? _context.Set<DetalleControlExistencia>().SingleOrDefault(d => d.ControlId == control.Id && d.ProductoId == p.Id).Cantidad : 0,
+                    Cantidad = _context.Set<DetalleControlExistenciaVenta>().Any(d => d.ControlId == control.Id && d.ProductoId == p.Id) ? _context.Set<DetalleControlExistenciaVenta>().SingleOrDefault(d => d.ControlId == control.Id && d.ProductoId == p.Id).Cantidad : 0,
                     CantidadAnterior = existenciaAnterior.Any(e => e.ProductoId == p.Id) ? existenciaAnterior.SingleOrDefault(e => e.ProductoId == p.Id).Cantidad : 0,
                 });
             var data = new ControlExistenciaVM
@@ -215,15 +218,18 @@ namespace GestionBares.Controllers
                 {
                     foreach (var item in controlExistencia.Detalles)
                     {
+                        var producto = _context.Set<Producto>().Find(item.ProductoId);
                         if (_context.Set<DetalleControlExistenciaVenta>().Any(d => d.ControlId == control.Id && d.ProductoId == item.ProductoId))
                         {
                             var detalle = _context.Set<DetalleControlExistenciaVenta>().SingleOrDefault(d => d.ControlId == control.Id && d.ProductoId == item.ProductoId);
                             detalle.Cantidad = item.Cantidad;
+                            detalle.Costo = producto.Costo;
+                            detalle.Precio = producto.Precio;
                             _context.Update(detalle);
                         }
                         else
                         {
-                            _context.Add(new DetalleControlExistenciaVenta { ControlId = control.Id, ProductoId = item.ProductoId, Cantidad = item.Cantidad });
+                            _context.Add(new DetalleControlExistenciaVenta { ControlId = control.Id, ProductoId = item.ProductoId, Cantidad = item.Cantidad, Costo = producto.Costo, Precio = producto.Precio });
                         }
                     }
                     _context.SaveChanges();
@@ -240,7 +246,7 @@ namespace GestionBares.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Detalles), new { Id = control.Id });
             }
             TempData["error"] = "Error en realizar esta acción";
             return View(controlExistencia);

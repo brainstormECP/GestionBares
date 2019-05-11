@@ -17,12 +17,12 @@
     </p>
     <table class="table dynamic">
         <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Codigo)
-                </th>
+            <tr>                
                 <th>
                     @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Codigo)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Unidad)
@@ -43,6 +43,9 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Nombre)
                     </td>

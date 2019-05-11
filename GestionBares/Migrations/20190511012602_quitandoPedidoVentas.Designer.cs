@@ -4,14 +4,16 @@ using GestionBares.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestionBares.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190511012602_quitandoPedidoVentas")]
+    partial class quitandoPedidoVentas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,8 +124,6 @@ namespace GestionBares.Migrations
 
                     b.Property<int>("ControlId");
 
-                    b.Property<decimal>("Costo");
-
                     b.Property<int>("ProductoId");
 
                     b.HasKey("Id");
@@ -144,10 +144,6 @@ namespace GestionBares.Migrations
                     b.Property<double>("Cantidad");
 
                     b.Property<int>("ControlId");
-
-                    b.Property<decimal>("Costo");
-
-                    b.Property<decimal>("Precio");
 
                     b.Property<int>("ProductoId");
 
@@ -450,10 +446,10 @@ namespace GestionBares.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "1", ConcurrencyStamp = "b7e4e111-395b-4625-899d-14e2db1f6034", Name = "ADMINISTRADOR", NormalizedName = "ADMINISTRADOR" },
-                        new { Id = "2", ConcurrencyStamp = "6e41b9e0-1b0f-45e2-92e3-9e1909e0276f", Name = "DEPENDIENTE", NormalizedName = "DEPENDIENTE" },
-                        new { Id = "3", ConcurrencyStamp = "b646ee3e-86b1-4f13-9e12-aae7e3db3411", Name = "AUDITOR", NormalizedName = "AUDITOR" },
-                        new { Id = "4", ConcurrencyStamp = "5f6f85c9-654f-4aad-914a-e65056a751a3", Name = "A+B", NormalizedName = "A+B" }
+                        new { Id = "1", ConcurrencyStamp = "2aceb298-4a38-4c2f-9ed8-45013737ecf0", Name = "ADMINISTRADOR", NormalizedName = "ADMINISTRADOR" },
+                        new { Id = "2", ConcurrencyStamp = "a58b8d48-e08b-4b79-8b81-7db7c8e764f7", Name = "DEPENDIENTE", NormalizedName = "DEPENDIENTE" },
+                        new { Id = "3", ConcurrencyStamp = "d2245787-5450-4869-b657-f0d1a7370526", Name = "AUDITOR", NormalizedName = "AUDITOR" },
+                        new { Id = "4", ConcurrencyStamp = "7f322c9e-3809-453d-8080-66475fb0d66c", Name = "A+B", NormalizedName = "A+B" }
                     );
                 });
 

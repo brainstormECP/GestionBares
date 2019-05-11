@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using GestionBares.Models;
 using GestionBares.Utils;
+using GestionBares.Models.AlmacenModels;
 
 namespace GestionBares
 {
@@ -39,6 +40,11 @@ namespace GestionBares
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<AlmacenDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("AlmacenConnection")));
+
             services.AddIdentity<Usuario, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddTransient<UsuarioSignInManager>();

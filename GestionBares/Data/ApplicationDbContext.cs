@@ -61,8 +61,6 @@ namespace GestionBares.Data
         public DbSet<StandardVenta> StandardVentas { get; set; }
         public DbSet<DependienteBar> DependientesBares { get; set; }
         public DbSet<EntregaDeAlmacenVenta> EntregasDeAlmacenVenta { get; set; }
-        public DbSet<PedidoAlmacenVenta> PedidosDeAlmacenVenta { get; set; }
-        public DbSet<DetallePedidoAlmacenVenta> DetallesPedidosDeAlmacenVenta { get; set; }
         public DbSet<TrasladoVenta> TrasladosVenta { get; set; }
         public DbSet<ControlExistenciaVenta> ControlesDeExistenciasVenta { get; set; }
         public DbSet<DetalleControlExistenciaVenta> DetallesControlesDeExistenciasVenta { get; set; }

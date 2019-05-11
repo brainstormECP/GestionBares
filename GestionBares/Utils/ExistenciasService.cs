@@ -35,7 +35,7 @@ namespace GestionBares.Utils
             if (ultimoControl == null) return new List<MovimientoVM>();
             foreach (var detalle in ultimoControl.Detalles)
             {
-                result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Inicio = detalle.Cantidad });
+                result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Inicio = detalle.Cantidad, Costo = detalle.Costo });
             }
             var entradas = _db.Set<EntregaDeAlmacen>()
                 .Include(e => e.Producto)
@@ -49,10 +49,12 @@ namespace GestionBares.Utils
                 }
                 else
                 {
-                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Entradas = detalle.Cantidad });
+                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Entradas = detalle.Cantidad, Costo = detalle.Producto.Costo });
                 }
             }
-            var trasladosSalidas = _db.Set<Traslado>().Where(t => t.TurnoId == turnoId && t.Aprobado);
+            var trasladosSalidas = _db.Set<Traslado>()
+                .Include(t => t.Producto)
+                .Where(t => t.TurnoId == turnoId && t.Aprobado);
             foreach (var detalle in trasladosSalidas)
             {
                 if (result.Any(r => r.ProductoId == detalle.ProductoId))
@@ -62,10 +64,11 @@ namespace GestionBares.Utils
                 }
                 else
                 {
-                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Enviados = detalle.Cantidad });
+                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Enviados = detalle.Cantidad, Costo = detalle.Producto.Costo });
                 }
             }
             var trasladosEntradas = _db.Set<Traslado>()
+                .Include(t => t.Producto)
                 .Where(t => t.Fecha >= turno.FechaInicio && t.Fecha <= (turno.FechaFin ?? DateTime.Now) && t.DestinoId == turno.BarId && t.Aprobado);
             foreach (var detalle in trasladosEntradas)
             {
@@ -76,7 +79,7 @@ namespace GestionBares.Utils
                 }
                 else
                 {
-                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Recibidos = detalle.Cantidad });
+                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Recibidos = detalle.Cantidad, Costo = detalle.Producto.Costo });
                 }
             }
             var control = _db.Set<ControlExistencia>()
@@ -94,7 +97,7 @@ namespace GestionBares.Utils
                     }
                     else
                     {
-                        result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Fin = detalle.Cantidad });
+                        result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Fin = detalle.Cantidad, Costo = detalle.Costo });
                     }
                 }
             }
@@ -122,7 +125,7 @@ namespace GestionBares.Utils
             }
             foreach (var detalle in ultimoControl.Detalles)
             {
-                result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Inicio = detalle.Cantidad });
+                result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Inicio = detalle.Cantidad, Costo = detalle.Costo, Precio = detalle.Precio });
             }
             var entradas = _db.Set<EntregaDeAlmacenVenta>()
                 .Include(e => e.Producto)
@@ -136,7 +139,7 @@ namespace GestionBares.Utils
                 }
                 else
                 {
-                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Entradas = detalle.Cantidad });
+                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Entradas = detalle.Cantidad, Costo = detalle.Producto.Costo, Precio = detalle.Producto.Precio });
                 }
             }
             var trasladosSalidas = _db.Set<TrasladoVenta>().Where(t => t.TurnoId == turnoId && t.Aprobado);
@@ -149,7 +152,7 @@ namespace GestionBares.Utils
                 }
                 else
                 {
-                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Enviados = detalle.Cantidad });
+                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Enviados = detalle.Cantidad, Costo = detalle.Producto.Costo, Precio = detalle.Producto.Precio });
                 }
             }
             var trasladosEntradas = _db.Set<TrasladoVenta>()
@@ -163,7 +166,7 @@ namespace GestionBares.Utils
                 }
                 else
                 {
-                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Recibidos = detalle.Cantidad });
+                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Recibidos = detalle.Cantidad, Costo = detalle.Producto.Costo, Precio = detalle.Producto.Precio });
                 }
             }
             var control = _db.Set<ControlExistenciaVenta>()
@@ -181,7 +184,7 @@ namespace GestionBares.Utils
                     }
                     else
                     {
-                        result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Fin = detalle.Cantidad });
+                        result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Fin = detalle.Cantidad, Costo = detalle.Costo, Precio = detalle.Precio });
                     }
                 }
             }

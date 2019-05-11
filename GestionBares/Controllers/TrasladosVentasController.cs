@@ -78,8 +78,13 @@ namespace GestionBares.Controllers
             }
             var turno = _context.Set<Turno>().SingleOrDefault(t => t.DependienteId == dependiente.Id && t.Activo);
             ViewBag.TurnoId = turno.Id;
-            ViewData["DestinoId"] = new SelectList(_context.Bares.Where(b => b.Id != turno.BarId), "Id", "Nombre");
-            ViewData["ProductoId"] = new SelectList(_context.Productos.Include(p => p.Unidad).Select(p => new { Id = p.Id, Nombre = p.Nombre + " (" + p.Unidad.Nombre + ")" }), "Id", "Nombre");
+            var baresDestino = _context.Set<Turno>().Include(t => t.Bar).Where(b => b.Activo && b.BarId != turno.BarId).Select(c => c.Bar);
+            ViewData["DestinoId"] = new SelectList(baresDestino, "Id", "Nombre");
+            var productos = _context.Set<Producto>()
+                .Include(p => p.Unidad)
+                .Where(p => _context.Set<StandardVenta>().Any(s => s.ProductoId == p.Id && s.BarId == turno.BarId))
+                .Select(p => new { Id = p.Id, Nombre = p.Nombre + " (" + p.Unidad.Nombre + ")" });
+            ViewData["ProductoId"] = new SelectList(productos, "Id", "Nombre");
             return View();
         }
 

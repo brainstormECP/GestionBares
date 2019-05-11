@@ -87,7 +87,10 @@ namespace GestionBares.Controllers
                 TempData["info"] = "Ya usted tiene un turno abierto.";
                 return RedirectToAction(nameof(Cerrar));
             }
-            ViewData["BarId"] = new SelectList(_context.Bares, "Id", "Nombre");
+            var bares = _context.Set<DependienteBar>()
+                .Include(d => d.Bar)
+                .Where(d => d.DependienteId == dependiente.Id && !_context.Set<Turno>().Any(t => t.BarId == d.BarId && t.Activo)).Select(b => b.Bar);
+            ViewData["BarId"] = new SelectList(bares, "Id", "Nombre");
             return View(new Turno { DependienteId = dependiente.Id });
         }
 

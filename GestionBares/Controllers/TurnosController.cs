@@ -133,6 +133,14 @@ namespace GestionBares.Controllers
             var turno = _context.Set<Turno>().SingleOrDefault(t => t.Id == id);
             turno.FechaFin = DateTime.Now;
             turno.Activo = false;
+            foreach (var control in _context.Set<ControlExistencia>().Where(c => c.TurnoId == id))
+            {
+                control.Activo = false;
+            }
+            foreach (var control in _context.Set<ControlExistenciaVenta>().Where(c => c.TurnoId == id))
+            {
+                control.Activo = false;
+            }
             _context.SaveChanges();
             TempData["exito"] = "La acción se ha realizado correctamente";
             return RedirectToAction("Index", "Home");

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using GestionBares.Utils;
 using GestionBares.ViewModels;
+using GestionBares.Models.AlmacenModels;
 
 namespace GestionBares.Controllers
 {
@@ -18,83 +19,46 @@ namespace GestionBares.Controllers
     public class SolicitudesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AlmacenDbContext _almacen;
 
         public SolicitudesController(ApplicationDbContext context)
         {
             _context = context;
+            _almacen = new AlmacenDbContext();
         }
 
         // GET: Traslados
         public IActionResult Productos()
         {
+            var existencias = _almacen.Set<Existencia>().ToList();
             var pedidos = _context.Set<DetallePedidoAlmacen>()
                 .Include(t => t.Pedido.Turno.Bar)
                 .Include(t => t.Pedido.Turno.Dependiente)
                 .Include(t => t.Producto)
                 .Where(t => !t.Atendido)
-                .GroupBy(t => t.Producto)
                 .Select(t => new SolicitudVM
                 {
-                    Producto = t.Key.Nombre,
-                    ProductoId = t.Key.Id,
-                    EnAlmacen = 0,
-                    Bares = t.GroupBy(b => b.Pedido.Turno.Bar).Select(c => new SolicitudBarVM
-                    {
-                        Bar = c.Key.Nombre,
-                        BarId = c.Key.Id,
-                        Cantidad = c.Sum(s => s.Cantidad)
-                    }).ToList()
+                    Id = t.Id,
+                    Producto = t.Producto.Nombre,
+                    ProductoId = t.ProductoId,
+                    Bar = t.Pedido.Turno.Bar.Nombre,
+                    BarId = t.Pedido.Turno.BarId,
+                    Cantidad = t.Cantidad,
+                    EnAlmacen = existencias.Any(e => e.CodigoProducto == t.Producto.Codigo) ? existencias.SingleOrDefault(e => e.CodigoProducto == t.Producto.Codigo).Cantidad : 0,
                 })
                 .ToList();
-            ViewBag.Bares = _context.Set<Bar>().Select(b => b.Nombre);
-            return View(pedidos);
-        }
-
-        public IActionResult Ventas()
-        {
-            var pedidos = _context.Set<DetallePedidoAlmacenVenta>()
-                .Include(t => t.Pedido.Turno.Bar)
-                .Include(t => t.Pedido.Turno.Dependiente)
-                .Include(t => t.Producto)
-                .Where(t => !t.Atendido)
-                .GroupBy(t => t.Producto)
-                .Select(t => new SolicitudVM
-                {
-                    Producto = t.Key.Nombre,
-                    ProductoId = t.Key.Id,
-                    EnAlmacen = 0,
-                    Bares = t.GroupBy(b => b.Pedido.Turno.Bar).Select(c => new SolicitudBarVM
-                    {
-                        Bar = c.Key.Nombre,
-                        BarId = c.Key.Id,
-                        Cantidad = c.Sum(s => s.Cantidad)
-                    }).ToList()
-                })
-                .ToList();
-            ViewBag.Bares = _context.Set<Bar>().Select(b => b.Nombre);
             return View(pedidos);
         }
 
         public IActionResult Atender(int id)
         {
-            var pedidos = _context.Set<DetallePedidoAlmacen>().Where(d => !d.Atendido && d.ProductoId == id);
+            var pedidos = _context.Set<DetallePedidoAlmacen>().Where(d => !d.Atendido && d.Id == id);
             foreach (var pedido in pedidos)
             {
                 pedido.Atendido = true;
             }
             _context.SaveChanges();
             return RedirectToAction(nameof(Productos));
-        }
-
-        public IActionResult AtenderVentas(int id)
-        {
-            var pedidos = _context.Set<DetallePedidoAlmacenVenta>().Where(d => !d.Atendido && d.ProductoId == id);
-            foreach (var pedido in pedidos)
-            {
-                pedido.Atendido = true;
-            }
-            _context.SaveChanges();
-            return RedirectToAction(nameof(Ventas));
         }
     }
 }

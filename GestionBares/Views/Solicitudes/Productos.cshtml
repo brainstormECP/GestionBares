@@ -17,14 +17,9 @@
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Producto)
-                </th>               
-                @foreach (var item in ViewBag.Bares)
-                {
-                    <th>
-                        @item
-                    </th>
-                }
-                <th>Total</th>
+                </th> 
+                <th>@Html.DisplayNameFor(model => model.Bar)</th>
+                <th>@Html.DisplayNameFor(model => model.Cantidad)</th>
                 <th>En Almacen</th>
                 <th></th>
             </tr>
@@ -36,25 +31,23 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Producto)
                     </td>
-                @foreach (var bar in ViewBag.Bares)
-                {
-                    <th>
-                        @(item.Bares.Any(b => b.Bar == bar)?item.Bares.SingleOrDefault(b => b.Bar == bar).Cantidad:0)
-                    </th>
-                }
-                    <td>                        
-                        <span >@item.Bares.Sum(b => b.Cantidad)</span>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bar)
                     </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cantidad)
+                    </td>
+                
                 @{
                             var clase = "";
-                            if (item.Bares.Sum(b => b.Cantidad) > item.EnAlmacen) {clase = "danger";}
+                            if (item.Cantidad > item.EnAlmacen) {clase = "danger";}
                             else {clase = "success";}
                         }
                     <td class="bg bg-@clase">                        
                         <span >@item.EnAlmacen</span>
                     </td>
                     <td class="text-right col-md-3">
-                        <a data-hint="Atender" class="btn btn-primary btn-sm atender hint--top hint--success" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Atender" asp-route-id="@item.ProductoId"><span class="fa fa-check" aria-hidden="true"></span></a>
+                        <a data-hint="Atender" class="btn btn-primary btn-sm atender hint--top hint--success" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Atender" asp-route-id="@item.Id"><span class="fa fa-check" aria-hidden="true"></span></a>
                     </td>
                 </tr>
             }

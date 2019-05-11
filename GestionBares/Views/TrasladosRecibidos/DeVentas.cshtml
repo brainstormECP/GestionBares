@@ -1,0 +1,71 @@
+﻿@model IEnumerable<GestionBares.Models.TrasladoVenta>
+
+@{
+    ViewData["Title"] = "Lista";
+}
+@section styles{
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+}
+
+<div class="container-fluid">
+    <h3>Listado de Traslados a recibir de venta</h3>
+    <hr />
+    <table class="table dynamic">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Producto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cantidad)
+                </th>
+                <th>
+                    Origen
+                </th>
+                <th>Efectuado Por</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <span class="hidden">@item.Fecha.Ticks</span>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Producto.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cantidad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Turno.Bar.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Turno.Dependiente.NombreCompleto)
+                    </td>
+                    <td class="text-right col-md-3">
+                        @if(!item.Aprobado){
+                            <a data-hint="Recibir" class="btn btn-success btn-sm recibir hint--top hint--success" data-toggle="confirmation" data-title="Confirmar Recibir" data-placement="top" data-singleton="true" asp-action="RecibirDeVenta" asp-route-id="@item.Id"><span class="fa fa-check" aria-hidden="true"></span></a>
+                            <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Eliminar" data-placement="top" data-singleton="true" asp-action="EliminarDeVenta" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    <script src="~/js/datatables.min.js"></script>
+    <script src="~/js/mbs-qdtf.js"></script>
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+}

@@ -97,7 +97,7 @@ namespace GestionBares.Controllers
                 var costos = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Costos = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Costo * e.Consumo)
+                    Costos = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => (double)e.Costo * e.Consumo)
                 }).ToList();
                 datosCosto.Datasets.Add(new Dataset
                 {
@@ -120,7 +120,7 @@ namespace GestionBares.Controllers
                 var ventas = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * e.Precio)
+                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Precio)
                 }).ToList();
                 datosVentas.Datasets.Add(new Dataset
                 {
@@ -163,7 +163,7 @@ namespace GestionBares.Controllers
                 var costos = turnosEnPeriodo.Where(t => t.BarId == dependienteId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Costo = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Consumo * e.Costo)
+                    Costo = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Costo)
                 }).ToList();
                 datosCosto.Datasets.Add(new Dataset
                 {
@@ -186,7 +186,7 @@ namespace GestionBares.Controllers
                 var ventas = turnosEnPeriodo.Where(t => t.BarId == dependienteId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * e.Precio)
+                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Precio)
                 }).ToList();
                 datosVentas.Datasets.Add(new Dataset
                 {

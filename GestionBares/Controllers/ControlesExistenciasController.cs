@@ -243,7 +243,7 @@ namespace GestionBares.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Detalles), new { Id = control.Id });
             }
             TempData["error"] = "Error en realizar esta acción";
             return View(controlExistencia);

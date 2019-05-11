@@ -47,7 +47,6 @@ namespace GestionBares.Controllers
                     EnAlmacen = existencias.Any(e => e.CodigoProducto == t.Producto.Codigo) ? existencias.SingleOrDefault(e => e.CodigoProducto == t.Producto.Codigo).Cantidad : 0,
                 })
                 .ToList();
-            ViewBag.Bares = _context.Set<Bar>().Select(b => b.Nombre);
             return View(pedidos);
         }
 

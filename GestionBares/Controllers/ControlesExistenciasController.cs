@@ -218,15 +218,17 @@ namespace GestionBares.Controllers
                 {
                     foreach (var item in controlExistencia.Detalles)
                     {
+                        var producto = _context.Set<Producto>().Find(item.ProductoId);
                         if (_context.Set<DetalleControlExistencia>().Any(d => d.ControlId == control.Id && d.ProductoId == item.ProductoId))
                         {
                             var detalle = _context.Set<DetalleControlExistencia>().SingleOrDefault(d => d.ControlId == control.Id && d.ProductoId == item.ProductoId);
                             detalle.Cantidad = item.Cantidad;
+                            detalle.Costo = producto.Costo;
                             _context.Update(detalle);
                         }
                         else
                         {
-                            _context.Add(new DetalleControlExistencia { ControlId = control.Id, ProductoId = item.ProductoId, Cantidad = item.Cantidad });
+                            _context.Add(new DetalleControlExistencia { ControlId = control.Id, ProductoId = item.ProductoId, Cantidad = item.Cantidad, Costo = producto.Costo });
                         }
                     }
                     _context.SaveChanges();

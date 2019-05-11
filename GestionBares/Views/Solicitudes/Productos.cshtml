@@ -17,14 +17,9 @@
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Producto)
-                </th>               
-                @foreach (var item in ViewBag.Bares)
-                {
-                    <th>
-                        @item
-                    </th>
-                }
-                <th>Total</th>
+                </th> 
+                <th>@Html.DisplayNameFor(model => model.Bar)</th>
+                <th>@Html.DisplayNameFor(model => model.Cantidad)</th>
                 <th>En Almacen</th>
                 <th></th>
             </tr>
@@ -36,18 +31,16 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Producto)
                     </td>
-                @foreach (var bar in ViewBag.Bares)
-                {
-                    <th>
-                        @(item.Bares.Any(b => b.Bar == bar)?item.Bares.SingleOrDefault(b => b.Bar == bar).Cantidad:0)
-                    </th>
-                }
-                    <td>                        
-                        <span >@item.Bares.Sum(b => b.Cantidad)</span>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bar)
                     </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cantidad)
+                    </td>
+                
                 @{
                             var clase = "";
-                            if (item.Bares.Sum(b => b.Cantidad) > item.EnAlmacen) {clase = "danger";}
+                            if (item.Cantidad > item.EnAlmacen) {clase = "danger";}
                             else {clase = "success";}
                         }
                     <td class="bg bg-@clase">                        

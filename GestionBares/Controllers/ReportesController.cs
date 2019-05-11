@@ -72,7 +72,7 @@ namespace GestionBares.Controllers
             return View(data);
         }
 
-        public IActionResult ConsumoVentasBares()
+        public IActionResult CostosVentasBares()
         {
             ViewBag.Bares = new MultiSelectList(_context.Set<Bar>().ToList(), "Id", "Nombre");
             ViewBag.FormaDePeriodo = new SelectList(Enum.GetValues(typeof(FormaDePeriodo)));
@@ -80,7 +80,7 @@ namespace GestionBares.Controllers
         }
 
         [HttpPost]
-        public IActionResult ConsumoVentasBares(ParametrosVM parametros)
+        public IActionResult CostosVentasBares(ParametrosVM parametros)
         {
             var existenciaService = new ExistenciasService(_context);
             var turnosEnPeriodo = _context.Set<Turno>().Where(t => t.FechaInicio >= parametros.FechaInicio && t.FechaInicio <= parametros.FechaFin).ToList();
@@ -126,22 +126,22 @@ namespace GestionBares.Controllers
                     Data = datosVentas.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Ventas) : 0).ToList()
                 });
             }
-            ViewBag.Consumo = datosCosto;
+            ViewBag.Costos = datosCosto;
             ViewBag.Ventas = datosVentas;
             ViewBag.Bares = new MultiSelectList(_context.Set<Bar>().ToList(), "Id", "Nombre", parametros.Bares);
             ViewBag.FormaDePeriodo = new SelectList(Enum.GetValues(typeof(FormaDePeriodo)), parametros.FormaDePeriodo);
             return View(parametros);
         }
 
-        public IActionResult ConsumoVentasDependientes()
+        public IActionResult CostosVentasDependientes()
         {
-            ViewBag.Dependientes = new MultiSelectList(_context.Set<Dependiente>().ToList(), "Id", "Nombre");
+            ViewBag.Dependientes = new MultiSelectList(_context.Set<Dependiente>().ToList(), "Id", "NombreCompleto");
             ViewBag.FormaDePeriodo = new SelectList(Enum.GetValues(typeof(FormaDePeriodo)));
             return View();
         }
 
         [HttpPost]
-        public IActionResult ConsumoVentasDependientes(ParametrosVM parametros)
+        public IActionResult CostosVentasDependientes(ParametrosVM parametros)
         {
             var existenciaService = new ExistenciasService(_context);
             var turnosEnPeriodo = _context.Set<Turno>().Where(t => t.FechaInicio >= parametros.FechaInicio && t.FechaInicio <= parametros.FechaFin).ToList();
@@ -149,55 +149,49 @@ namespace GestionBares.Controllers
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
             };
-            foreach (var barId in parametros.Bares)
+            foreach (var dependienteId in parametros.Dependientes)
             {
-                var bar = _context.Set<Bar>().Find(barId);
-                var consumos = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
+                var dependiente = _context.Set<Dependiente>().Find(dependienteId);
+                var costos = turnosEnPeriodo.Where(t => t.BarId == dependienteId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Consumo = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Consumo)
+                    Costo = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Consumo)
                 }).ToList();
                 datosCosto.Datasets.Add(new Dataset
                 {
-                    Label = bar.Nombre,
+                    Label = dependiente.NombreCompleto,
                     BackgroundColor = "#a1b1c1",
                     BorderColor = "#a1b1c1",
                     Fill = false,
-                    Data = datosCosto.Labels.Select(c => consumos.Any(d => d.Fecha.ToShortDateString() == c) ? consumos.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Consumo) : 0).ToList()
+                    Data = datosCosto.Labels.Select(c => costos.Any(d => d.Fecha.ToShortDateString() == c) ? costos.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costo) : 0).ToList()
                 });
             }
             var datosVentas = new DatosGraficas()
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
             };
-            foreach (var barId in parametros.Bares)
+            foreach (var dependienteId in parametros.Dependientes)
             {
-                var bar = _context.Set<Bar>().Find(barId);
-                var ventas = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
+                var dependiente = _context.Set<Dependiente>().Find(dependienteId);
+                var ventas = turnosEnPeriodo.Where(t => t.BarId == dependienteId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
                     Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo)
                 }).ToList();
                 datosVentas.Datasets.Add(new Dataset
                 {
-                    Label = bar.Nombre,
+                    Label = dependiente.NombreCompleto,
                     BackgroundColor = "#d3b577",
                     BorderColor = "#d3b577",
                     Fill = false,
                     Data = datosVentas.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Ventas) : 0).ToList()
                 });
             }
-            ViewBag.Consumo = datosCosto;
+            ViewBag.Costos = datosCosto;
             ViewBag.Ventas = datosVentas;
-            ViewBag.Dependientes = new MultiSelectList(_context.Set<Dependiente>().ToList(), "Id", "Nombre", parametros.Bares);
+            ViewBag.Dependientes = new MultiSelectList(_context.Set<Dependiente>().ToList(), "Id", "NombreCompleto", parametros.Dependientes);
             ViewBag.FormaDePeriodo = new SelectList(Enum.GetValues(typeof(FormaDePeriodo)), parametros.FormaDePeriodo);
             return View(parametros);
-        }
-
-        private List<string> GetLabels(DateTime fechaInicio, DateTime fechaFin, FormaDePeriodo forma)
-        {
-            var result = new List<string>();
-            return result;
         }
     }
 }

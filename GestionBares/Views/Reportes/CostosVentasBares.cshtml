@@ -12,7 +12,7 @@
     <h3>Costos y ventas en periodo seleccion de bar</h3>
     <div class="row">
         <div class="col-md-12">
-            <form asp-action="ConsumoVentasBares">
+            <form asp-action="CostosVentasBares">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-4">
                     <label asp-for="FechaInicio" class="control-label"></label>
@@ -34,7 +34,7 @@
             </form>
         </div>
         <div class="col-md-6">
-            <canvas id="consumo"></canvas>
+            <canvas id="costos"></canvas>
         </div>
         <div class="col-md-6">
             <canvas id="ventas"></canvas>
@@ -48,9 +48,9 @@
     <script>
         $(document).ready(function () {
         });
-        var configConsumo = {
+        var configCostos = {
 			type: 'line',
-			data: @Html.Raw(Json.Serialize(@ViewBag.Consumo)) ,
+			data: @Html.Raw(Json.Serialize(@ViewBag.Costos)) ,
 			options: {
 				responsive: true,
 				title: {
@@ -121,8 +121,8 @@
 		};
 
 		window.onload = function() {
-			var ctx = document.getElementById('consumo').getContext('2d');
-			window.myLine = new Chart(ctx, configConsumo);
+			var ctx = document.getElementById('costos').getContext('2d');
+			window.myLine = new Chart(ctx, configCostos);
             var ctx2 = document.getElementById('ventas').getContext('2d');
 			window.myLine2 = new Chart(ctx2, configVentas);
 		};

@@ -205,6 +205,89 @@ namespace GestionBares.Controllers
             return View(parametros);
         }
 
+        public IActionResult MovimientosDeProducto()
+        {
+            ViewBag.ProductoId = new SelectList(_context.Set<Producto>().ToList(), "Id", "Nombre");
+            return View(new List<MovimientoDeProductoVM>());
+        }
+
+        [HttpPost]
+        public IActionResult MovimientosDeProducto(ParametrosVM parametros)
+        {
+            var existenciaService = new ExistenciasService(_context);
+            var turnosEnPeriodo = _context.Set<Turno>().Where(t => t.FechaInicio >= parametros.FechaInicio && t.FechaInicio <= parametros.FechaFin).ToList();
+            var result = new List<MovimientoDeProductoVM>();
+            //controles de existencia
+            result.AddRange(_context.Set<DetalleControlExistencia>()
+                .Include(c => c.Control.Turno.Bar)
+                .Where(c => c.ProductoId == parametros.ProductoId && turnosEnPeriodo.Any(t => t.Id == c.Control.TurnoId))
+                .Select(c => new MovimientoDeProductoVM
+                {
+                    Bar = c.Control.Turno.Bar.Nombre,
+                    Fecha = c.Control.Fecha,
+                    Cantidad = (decimal)c.Cantidad,
+                    TipoDeMovimiento = "Control de existencia"
+                }));
+            //controles de existencias de ventas
+            result.AddRange(_context.Set<DetalleControlExistenciaVenta>()
+            .Include(c => c.Control.Turno.Bar)
+            .Where(c => c.ProductoId == parametros.ProductoId && turnosEnPeriodo.Any(t => t.Id == c.Control.TurnoId))
+            .Select(c => new MovimientoDeProductoVM
+            {
+                Bar = c.Control.Turno.Bar.Nombre,
+                Fecha = c.Control.Fecha,
+                Cantidad = (decimal)c.Cantidad,
+                TipoDeMovimiento = "Control de existencia para venta"
+            }));
+            //entradas de almacen
+            result.AddRange(_context.Set<EntregaDeAlmacen>()
+                .Include(c => c.Turno.Bar)
+                .Where(c => c.ProductoId == parametros.ProductoId && turnosEnPeriodo.Any(t => t.Id == c.TurnoId))
+                .Select(c => new MovimientoDeProductoVM
+                {
+                    Bar = c.Turno.Bar.Nombre,
+                    Fecha = c.Turno.FechaInicio,
+                    Cantidad = (decimal)c.Cantidad,
+                    TipoDeMovimiento = "Entrada de almacen"
+                }));
+            //entradas de almacen de venta
+            result.AddRange(_context.Set<EntregaDeAlmacenVenta>()
+                .Include(c => c.Turno.Bar)
+                .Where(c => c.ProductoId == parametros.ProductoId && turnosEnPeriodo.Any(t => t.Id == c.TurnoId))
+                .Select(c => new MovimientoDeProductoVM
+                {
+                    Bar = c.Turno.Bar.Nombre,
+                    Fecha = c.Turno.FechaInicio,
+                    Cantidad = (decimal)c.Cantidad,
+                    TipoDeMovimiento = "Entrada de almacen para venta"
+                }));
+            // traslados
+            result.AddRange(_context.Set<Traslado>()
+            .Include(c => c.Turno.Bar)
+            .Where(c => c.ProductoId == parametros.ProductoId && turnosEnPeriodo.Any(t => t.Id == c.TurnoId))
+            .Select(c => new MovimientoDeProductoVM
+            {
+                Bar = c.Turno.Bar.Nombre,
+                Fecha = c.Fecha,
+                Cantidad = (decimal)c.Cantidad,
+                TipoDeMovimiento = "Traslado"
+            }));
+            // traslados de venta
+            result.AddRange(_context.Set<TrasladoVenta>()
+            .Include(c => c.Turno.Bar)
+            .Where(c => c.ProductoId == parametros.ProductoId && turnosEnPeriodo.Any(t => t.Id == c.TurnoId))
+            .Select(c => new MovimientoDeProductoVM
+            {
+                Bar = c.Turno.Bar.Nombre,
+                Fecha = c.Fecha,
+                Cantidad = (decimal)c.Cantidad,
+                TipoDeMovimiento = "Traslado para venta"
+            }));
+            ViewBag.ProductoId = new SelectList(_context.Set<Producto>().ToList(), "Id", "Nombre", parametros.ProductoId);
+            return View(result);
+        }
+
+        #region Helpers
         private List<string> GetColor()
         {
             const int DELTA_PERCENT = 10;
@@ -266,5 +349,6 @@ namespace GestionBares.Controllers
         {
             return "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
         }
+        #endregion
     }
 }

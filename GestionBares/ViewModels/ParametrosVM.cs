@@ -4,6 +4,10 @@ using GestionBares.Models;
 
 namespace GestionBares.ViewModels
 {
+    public enum FormaDePeriodo
+    {
+        Dias, Semanas, Meses, Años
+    }
     public class ParametrosVM
     {
         public DateTime FechaInicio { get; set; }
@@ -13,6 +17,7 @@ namespace GestionBares.ViewModels
         public int? DependienteId { get; set; }
         public List<int> Dependientes { get; set; }
         public int? ProductoId { get; set; }
+        public FormaDePeriodo FormaDePeriodo { get; set; }
         public ParametrosVM()
         {
             Bares = new List<int>();

@@ -10,6 +10,7 @@ using GestionBares.Models;
 using Microsoft.AspNetCore.Authorization;
 using GestionBares.Utils;
 using GestionBares.ViewModels;
+using System.Drawing;
 
 namespace GestionBares.Controllers
 {
@@ -83,11 +84,13 @@ namespace GestionBares.Controllers
         public IActionResult CostosVentasBares(ParametrosVM parametros)
         {
             var existenciaService = new ExistenciasService(_context);
+            var colors = GetColor();
             var turnosEnPeriodo = _context.Set<Turno>().Where(t => t.FechaInicio >= parametros.FechaInicio && t.FechaInicio <= parametros.FechaFin).ToList();
             var datosCosto = new DatosGraficas()
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
             };
+            var index = 0;
             foreach (var barId in parametros.Bares)
             {
                 var bar = _context.Set<Bar>().Find(barId);
@@ -99,16 +102,18 @@ namespace GestionBares.Controllers
                 datosCosto.Datasets.Add(new Dataset
                 {
                     Label = bar.Nombre,
-                    BackgroundColor = "a1b1c1",
-                    BorderColor = "a1b1c1",
+                    BackgroundColor = colors[index],
+                    BorderColor = colors[index],
                     Fill = false,
                     Data = datosCosto.Labels.Select(c => costos.Any(d => d.Fecha.ToShortDateString() == c) ? costos.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costos) : 0).ToList()
                 });
+                index++;
             }
             var datosVentas = new DatosGraficas()
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
             };
+            index = 0;
             foreach (var barId in parametros.Bares)
             {
                 var bar = _context.Set<Bar>().Find(barId);
@@ -120,11 +125,12 @@ namespace GestionBares.Controllers
                 datosVentas.Datasets.Add(new Dataset
                 {
                     Label = bar.Nombre,
-                    BackgroundColor = "#d3b577",
-                    BorderColor = "#d3b577",
+                    BackgroundColor = colors[index],
+                    BorderColor = colors[index],
                     Fill = false,
                     Data = datosVentas.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Ventas) : 0).ToList()
                 });
+                index++;
             }
             ViewBag.Costos = datosCosto;
             ViewBag.Ventas = datosVentas;
@@ -144,11 +150,13 @@ namespace GestionBares.Controllers
         public IActionResult CostosVentasDependientes(ParametrosVM parametros)
         {
             var existenciaService = new ExistenciasService(_context);
+            var colors = GetColor();
             var turnosEnPeriodo = _context.Set<Turno>().Where(t => t.FechaInicio >= parametros.FechaInicio && t.FechaInicio <= parametros.FechaFin).ToList();
             var datosCosto = new DatosGraficas()
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
             };
+            var index = 0;
             foreach (var dependienteId in parametros.Dependientes)
             {
                 var dependiente = _context.Set<Dependiente>().Find(dependienteId);
@@ -160,16 +168,18 @@ namespace GestionBares.Controllers
                 datosCosto.Datasets.Add(new Dataset
                 {
                     Label = dependiente.NombreCompleto,
-                    BackgroundColor = "#a1b1c1",
-                    BorderColor = "#a1b1c1",
+                    BackgroundColor = colors[index],
+                    BorderColor = colors[index],
                     Fill = false,
                     Data = datosCosto.Labels.Select(c => costos.Any(d => d.Fecha.ToShortDateString() == c) ? costos.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costo) : 0).ToList()
                 });
+                index++;
             }
             var datosVentas = new DatosGraficas()
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
             };
+            index = 0;
             foreach (var dependienteId in parametros.Dependientes)
             {
                 var dependiente = _context.Set<Dependiente>().Find(dependienteId);
@@ -181,17 +191,80 @@ namespace GestionBares.Controllers
                 datosVentas.Datasets.Add(new Dataset
                 {
                     Label = dependiente.NombreCompleto,
-                    BackgroundColor = "#d3b577",
-                    BorderColor = "#d3b577",
+                    BackgroundColor = colors[index],
+                    BorderColor = colors[index],
                     Fill = false,
                     Data = datosVentas.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Ventas) : 0).ToList()
                 });
+                index++;
             }
             ViewBag.Costos = datosCosto;
             ViewBag.Ventas = datosVentas;
             ViewBag.Dependientes = new MultiSelectList(_context.Set<Dependiente>().ToList(), "Id", "NombreCompleto", parametros.Dependientes);
             ViewBag.FormaDePeriodo = new SelectList(Enum.GetValues(typeof(FormaDePeriodo)), parametros.FormaDePeriodo);
             return View(parametros);
+        }
+
+        private List<string> GetColor()
+        {
+            const int DELTA_PERCENT = 10;
+            List<Color> alreadyChoosenColors = new List<Color>();
+
+            // initialize the random generator
+            Random r = new Random();
+
+            for (int i = 0; i < 30; i++)
+            {
+                bool chooseAnotherColor = true;
+                Color tmpColor = Color.FromArgb(0, 0, 0);
+                while (chooseAnotherColor)
+                {
+                    // create a random color by generating three random channels
+                    //
+                    int redColor = r.Next(0, 255);
+                    int greenColor = r.Next(0, 255);
+                    int blueColor = r.Next(0, 255);
+                    tmpColor = Color.FromArgb(redColor, greenColor, blueColor);
+
+                    // check if a similar color has already been created
+                    //
+                    chooseAnotherColor = false;
+                    foreach (Color c in alreadyChoosenColors)
+                    {
+                        int delta = c.R * DELTA_PERCENT / 100;
+                        if (c.R - delta <= tmpColor.R && tmpColor.R <= c.R + delta)
+                        {
+                            chooseAnotherColor = true;
+                            break;
+                        }
+
+                        delta = c.G * DELTA_PERCENT / 100;
+                        if (c.G - delta <= tmpColor.G && tmpColor.G <= c.G + delta)
+                        {
+                            chooseAnotherColor = true;
+                            break;
+                        }
+
+                        delta = c.B * DELTA_PERCENT / 100;
+                        if (c.B - delta <= tmpColor.B && tmpColor.B <= c.B + delta)
+                        {
+                            chooseAnotherColor = true;
+                            break;
+                        }
+                    }
+                }
+
+                alreadyChoosenColors.Add(tmpColor);
+                // you can safely use the tmpColor here
+
+            }
+            var pallete = new List<Color>();
+            return alreadyChoosenColors.Select(c => HexConverter(c)).ToList();
+        }
+
+        private String HexConverter(Color color)
+        {
+            return "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
         }
     }
 }

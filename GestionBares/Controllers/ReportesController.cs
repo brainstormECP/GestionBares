@@ -91,10 +91,10 @@ namespace GestionBares.Controllers
             foreach (var barId in parametros.Bares)
             {
                 var bar = _context.Set<Bar>().Find(barId);
-                var consumos = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
+                var costos = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Consumo = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Consumo)
+                    Costos = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Costo * e.Consumo)
                 }).ToList();
                 datosCosto.Datasets.Add(new Dataset
                 {
@@ -102,7 +102,7 @@ namespace GestionBares.Controllers
                     BackgroundColor = "a1b1c1",
                     BorderColor = "a1b1c1",
                     Fill = false,
-                    Data = datosCosto.Labels.Select(c => consumos.Any(d => d.Fecha.ToShortDateString() == c) ? consumos.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Consumo) : 0).ToList()
+                    Data = datosCosto.Labels.Select(c => costos.Any(d => d.Fecha.ToShortDateString() == c) ? costos.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costos) : 0).ToList()
                 });
             }
             var datosVentas = new DatosGraficas()
@@ -115,7 +115,7 @@ namespace GestionBares.Controllers
                 var ventas = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo)
+                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * e.Precio)
                 }).ToList();
                 datosVentas.Datasets.Add(new Dataset
                 {
@@ -155,7 +155,7 @@ namespace GestionBares.Controllers
                 var costos = turnosEnPeriodo.Where(t => t.BarId == dependienteId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Costo = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Consumo)
+                    Costo = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Consumo * e.Costo)
                 }).ToList();
                 datosCosto.Datasets.Add(new Dataset
                 {
@@ -176,7 +176,7 @@ namespace GestionBares.Controllers
                 var ventas = turnosEnPeriodo.Where(t => t.BarId == dependienteId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo)
+                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * e.Precio)
                 }).ToList();
                 datosVentas.Datasets.Add(new Dataset
                 {

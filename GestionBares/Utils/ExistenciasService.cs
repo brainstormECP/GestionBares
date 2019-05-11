@@ -52,7 +52,9 @@ namespace GestionBares.Utils
                     result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Entradas = detalle.Cantidad });
                 }
             }
-            var trasladosSalidas = _db.Set<Traslado>().Where(t => t.TurnoId == turnoId && t.Aprobado);
+            var trasladosSalidas = _db.Set<Traslado>()
+                .Include(t => t.Producto)
+                .Where(t => t.TurnoId == turnoId && t.Aprobado);
             foreach (var detalle in trasladosSalidas)
             {
                 if (result.Any(r => r.ProductoId == detalle.ProductoId))
@@ -66,6 +68,7 @@ namespace GestionBares.Utils
                 }
             }
             var trasladosEntradas = _db.Set<Traslado>()
+                .Include(t => t.Producto)
                 .Where(t => t.Fecha >= turno.FechaInicio && t.Fecha <= (turno.FechaFin ?? DateTime.Now) && t.DestinoId == turno.BarId && t.Aprobado);
             foreach (var detalle in trasladosEntradas)
             {

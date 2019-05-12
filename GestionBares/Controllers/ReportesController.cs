@@ -86,29 +86,11 @@ namespace GestionBares.Controllers
             var existenciaService = new ExistenciasService(_context);
             var colors = GetColor();
             var turnosEnPeriodo = _context.Set<Turno>().Where(t => t.FechaInicio >= parametros.FechaInicio && t.FechaInicio <= parametros.FechaFin).ToList();
+            var index = 0;
             var datosCosto = new DatosGraficas()
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
             };
-            var index = 0;
-            foreach (var barId in parametros.Bares)
-            {
-                var bar = _context.Set<Bar>().Find(barId);
-                var costos = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
-                {
-                    Fecha = c.FechaInicio,
-                    Costos = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => (double)e.Costo * e.Consumo)
-                }).ToList();
-                datosCosto.Datasets.Add(new Dataset
-                {
-                    Label = bar.Nombre,
-                    BackgroundColor = colors[index],
-                    BorderColor = colors[index],
-                    Fill = false,
-                    Data = datosCosto.Labels.Select(c => costos.Any(d => d.Fecha.ToShortDateString() == c) ? costos.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costos) : 0).ToList()
-                });
-                index++;
-            }
             var datosVentas = new DatosGraficas()
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
@@ -120,7 +102,8 @@ namespace GestionBares.Controllers
                 var ventas = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Precio)
+                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Precio),
+                    Costos = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Costo),
                 }).ToList();
                 datosVentas.Datasets.Add(new Dataset
                 {
@@ -129,6 +112,14 @@ namespace GestionBares.Controllers
                     BorderColor = colors[index],
                     Fill = false,
                     Data = datosVentas.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Ventas) : 0).ToList()
+                });
+                datosCosto.Datasets.Add(new Dataset
+                {
+                    Label = bar.Nombre,
+                    BackgroundColor = colors[index],
+                    BorderColor = colors[index],
+                    Fill = false,
+                    Data = datosCosto.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costos) : 0).ToList()
                 });
                 index++;
             }
@@ -152,29 +143,11 @@ namespace GestionBares.Controllers
             var existenciaService = new ExistenciasService(_context);
             var colors = GetColor();
             var turnosEnPeriodo = _context.Set<Turno>().Where(t => t.FechaInicio >= parametros.FechaInicio && t.FechaInicio <= parametros.FechaFin).ToList();
+            var index = 0;
             var datosCosto = new DatosGraficas()
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
             };
-            var index = 0;
-            foreach (var dependienteId in parametros.Dependientes)
-            {
-                var dependiente = _context.Set<Dependiente>().Find(dependienteId);
-                var costos = turnosEnPeriodo.Where(t => t.BarId == dependienteId).Select(c => new
-                {
-                    Fecha = c.FechaInicio,
-                    Costo = existenciaService.ExistenciaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Costo)
-                }).ToList();
-                datosCosto.Datasets.Add(new Dataset
-                {
-                    Label = dependiente.NombreCompleto,
-                    BackgroundColor = colors[index],
-                    BorderColor = colors[index],
-                    Fill = false,
-                    Data = datosCosto.Labels.Select(c => costos.Any(d => d.Fecha.ToShortDateString() == c) ? costos.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costo) : 0).ToList()
-                });
-                index++;
-            }
             var datosVentas = new DatosGraficas()
             {
                 Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
@@ -186,7 +159,8 @@ namespace GestionBares.Controllers
                 var ventas = turnosEnPeriodo.Where(t => t.BarId == dependienteId).Select(c => new
                 {
                     Fecha = c.FechaInicio,
-                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Precio)
+                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Precio),
+                    Costos = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Costo),
                 }).ToList();
                 datosVentas.Datasets.Add(new Dataset
                 {
@@ -195,6 +169,14 @@ namespace GestionBares.Controllers
                     BorderColor = colors[index],
                     Fill = false,
                     Data = datosVentas.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Ventas) : 0).ToList()
+                });
+                datosCosto.Datasets.Add(new Dataset
+                {
+                    Label = dependiente.NombreCompleto,
+                    BackgroundColor = colors[index],
+                    BorderColor = colors[index],
+                    Fill = false,
+                    Data = datosCosto.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costos) : 0).ToList()
                 });
                 index++;
             }

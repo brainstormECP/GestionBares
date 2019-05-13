@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GestionBares.Data;
 using GestionBares.Models;
 using Microsoft.AspNetCore.Authorization;
-using GestionBares.ViewModel;
+using GestionBares.ViewModels;
 
 namespace GestionBares.Controllers
 {

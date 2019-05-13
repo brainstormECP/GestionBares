@@ -1,0 +1,29 @@
+﻿@model IEnumerable<GestionBares.ViewModels.VentasDependientesPorBar>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h3>Totales de Ventas</h3>
+
+<table class="table dynamic">
+    <thead>
+        <tr>
+            <th></th>
+            @foreach (var item in ViewBag.Bares)
+            {
+                <th>@item.Nombre</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DependienteNombre</td>
+                @foreach (var item2 in item.VentasPorBares)
+                {
+                    <td>@item2.PromedioVentasPorTurno</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

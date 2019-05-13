@@ -1,4 +1,4 @@
-﻿using GestionBares.ViewModel;
+﻿using GestionBares.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,8 @@ namespace GestionBares.Models
         public Bar Bar { get; set; }
         public int ProductoId { get; set; }
         public Producto Producto { get; set; }
-        [BindProperty][NotMapped]
+        [BindProperty]
+        [NotMapped]
         public List<CheckedProductos> CheckedProductos { get; set; }
 
         public StandardVenta()

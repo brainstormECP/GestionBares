@@ -1,4 +1,4 @@
-using GestionBares.ViewModel;
+using GestionBares.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

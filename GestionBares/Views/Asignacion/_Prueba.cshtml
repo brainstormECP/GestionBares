@@ -1,0 +1,51 @@
+﻿
+@model GestionBares.ViewModels.SeleccionarAsignacionVM
+@{
+
+}
+@section styles{
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+}
+    <div class="container-fluid">
+            <div class="col-md-4">
+                <label>Fecha Inicio</label>
+                <br />
+                <input type="date" asp-for="FechaInicio" />
+                <br />
+                <br />
+                <label>Dependientes</label>
+                @for(int x = 0; x < Model.CheckedDependientes.Count; x++)
+                {
+                <div>
+
+                    <span><input asp-for="CheckedDependientes[x].Checked" type="checkbox" /> @Model.CheckedDependientes[x].Dependiente.NombreCompleto</span>
+                    <input asp-for="CheckedDependientes[x].DependienteId" type="hidden" value="@Model.CheckedDependientes[x].DependienteId" />
+                </div>
+                }
+            </div>
+            <div class="col-md-4">
+                <label>Fecha Final</label>
+                <br />
+                <input type="date" asp-for="FechaFinal" />
+                <br />
+                <br />
+                <label>Bares</label>
+                @for (int x = 0; x < Model.CheckedTurnos.Count; x++)
+                {
+                    <div>
+                        <span><input asp-for="CheckedTurnos[x].Checked" type="checkbox" /> @Model.CheckedTurnos[x].Bar.Nombre</span>
+                        <input asp-for="CheckedTurnos[x].BarId" type="hidden" value="@Model.CheckedTurnos[x].BarId" />
+                    </div>
+
+                }
+            </div>
+    </div>
+@section scripts{
+    <script src="~/js/datatables.min.js"></script>
+    <script src="~/js/mbs-qdtf.js"></script>
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+}

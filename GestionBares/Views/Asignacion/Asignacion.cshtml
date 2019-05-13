@@ -1,0 +1,111 @@
+﻿<div>
+                @model IEnumerable<GestionBares.ViewModels.VentasDependientesPorBar>
+                @{
+                    ViewData["Title"] = "Asignacion";
+                }
+                @section styles{
+                    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+                    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+                }
+
+                @{
+                    double valor;
+                }
+
+                    <div class="container-fluid">
+                        <h3>Asignacion Optima</h3>
+                        <hr />
+                        <form asp-action="Asignacion">
+                            <div class="col-md-4">
+                                <input type="submit" value="Calcular Asignacion Optima" class="btn btn-success" />
+                            </div>
+                            @Html.Partial("_Prueba", new GestionBares.ViewModels.SeleccionarAsignacionVM() { CheckedDependientes = ViewBag.CheckedDependiente, CheckedTurnos = ViewBag.CheckedBares });
+
+                            @if (Model != null)
+                            {
+                                <h3>Totales de Ventas</h3>
+
+                                <table class="table dynamic">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            @foreach (var item in ViewBag.Bares)
+                                            {
+                                                <th>@item.Nombre</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@item.DependienteNombre</td>
+                                                @foreach (var item2 in item.VentasPorBares)
+                                                {
+                                                    <td>@item2.PromedioVentasPorTurno</td>
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                                <br />
+
+                                <h3>Razon Ventas/Turno</h3>
+
+                                <table class="table dynamic">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            @foreach (var item in ViewBag.Bares)
+                                            {
+                                                <th>@item.Nombre</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in ViewBag.CrearTablaRazon)
+                                        {
+                                            <tr>
+                                                <td>@item.DependienteNombre</td>
+                                                @foreach (var item2 in item.VentasPorBares)
+                                                {
+                                                    valor = (double)item2.PromedioVentasPorTurno / 100;
+                                                    <td>@valor</td>
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                            }
+                            <br />
+
+                            @if (ViewBag.AsignacionOptima != null)
+                            {
+
+                                <br />
+                                <div>
+                                    <ul>
+                                        @foreach (var item in ViewBag.AsignacionOptima)
+                                        {
+                                            <li><h5>@item</h5></li>
+                                        }
+                                    </ul>
+                                </div>
+                                <br />
+                                <br />
+                            }
+
+                        </form>
+                    </div>
+                @section scripts{
+                    <script src="~/js/datatables.min.js"></script>
+                    <script src="~/js/mbs-qdtf.js"></script>
+                    <script>
+                        $(document).ready(function () {
+                            $('.mdb-select').materialSelect();
+                        });</script>
+                }
+            </div>
+            

@@ -10,7 +10,6 @@ using GestionBares.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using GestionBares.Utils;
-using GestionBares.ViewModel;
 using GestionBares.ViewModels;
 using Microsoft.Extensions.Logging;
 

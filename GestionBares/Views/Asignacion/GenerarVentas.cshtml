@@ -1,0 +1,25 @@
+﻿
+@model ControlExistencia
+@{
+    ViewData["Title"] = "Index";
+}
+@section styles{
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+}
+<div class="container-fluid">
+    <h3>Listado de Turno</h3>
+    <hr />
+
+    <p>
+        <a class="btn btn-success" asp-action="GenerarAleatorio">Generar Ventas Aleatorio</a>
+    </p>
+
+</div>
+@section scripts{
+    <script src="~/js/datatables.min.js"></script>
+    <script src="~/js/mbs-qdtf.js"></script>
+    <script>
+$(document).ready(function () {
+        });</script>
+}

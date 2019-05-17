@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="~/css/hint.css">
     <link rel="stylesheet" href="~/css/toastr.min.css">
     <link rel="stylesheet" href="~/lib/chart.js/Chart.min.css">
-    @*<link rel="stylesheet" href="~/css/chosen.min.css">*@
+    <link rel="stylesheet" href="~/css/chosen.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,7 +41,6 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
-
         <header class="main-header">
             <!-- Logo -->
             <a href="index2.html" class="logo">
@@ -56,18 +55,15 @@
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                     <span class="sr-only">Toggle navigation</span>
                 </a>
-
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <!-- Messages: style can be found in dropdown.less-->
-                        <!-- Notifications: style can be found in dropdown.less -->                        
+                        <!-- Notifications: style can be found in dropdown.less -->
                         <!-- Tasks: style can be found in dropdown.less -->
                         <!-- User Account: style can be found in dropdown.less -->
                         @await Html.PartialAsync("_LoginPartial")
-                        
 
                         <!-- Control Sidebar Toggle Button -->
-
                     </ul>
                 </div>
             </nav>
@@ -89,7 +85,6 @@
                         </div>
                     </div>
                 }
-
                 <ul class="sidebar-menu">
                     @if (User.IsInRole(DefinicionRoles.Administrador))
                     {
@@ -111,11 +106,9 @@
             </section>
             <!-- /.sidebar -->
         </aside>
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @RenderBody()
-
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
@@ -125,16 +118,13 @@
             <div class="text-center">
                 <strong class="">Copyright &copy; 2019 - UMCC "Camilo Cienfuegos".</strong>
             </div>
-
         </footer>
-
         <!-- Control Sidebar -->
         <!-- /.control-sidebar -->
         <!-- Add the sidebar's background. This div must be placed
              immediately after the control sidebar -->
         <div class="control-sidebar-bg"></div>
     </div>
-
     <!-- jQuery 2.2.3 -->
     <script src="~/tema/plugins/jQuery/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -165,11 +155,11 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="~/tema/dist/js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
-    
-    @*<script src="~/js/chosen.jquery.min.js"></script>*@
+
     <script src="~/js/toastr.min.js"></script>
     <script src="~/js/bootstrap-confirmation.min.js"></script>
     <script src="~/lib/chart.js/Chart.min.js"></script>
+    <script src="~/js/chosen.jquery.min.js"></script>
     <script>
         $(document).ready(function () {
 
@@ -177,11 +167,11 @@
                 rootSelector: '[data-toggle=confirmation]',
                 //other opstions
             });
+            $('.chosen').chosen();
         });
     </script>
     @RenderSection("Scripts", required: false)
     <!-- END JAVASCRIPTS -->
-
     @if (TempData["notice"] != null || TempData["error"] != null || TempData["exito"] != null)
     {
         <script>

@@ -21,19 +21,19 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Fecha)
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.Producto)
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.Cantidad)
                 </th>
-                <th>
+                <th class="text-center">
                     Origen
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.Destino)
                 </th>
-                <th>Efectuado Por</th>
+                <th class="text-center">Efectuado Por</th>
                 <th></th>
             </tr>
         </thead>
@@ -45,22 +45,22 @@
                         <span class="hidden">@item.Fecha.Ticks</span>
                         @Html.DisplayFor(modelItem => item.Fecha)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Producto.Nombre)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Cantidad)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Turno.Bar.Nombre)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Destino.Nombre)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Turno.Dependiente.NombreCompleto)
                     </td>
-                    <td class="text-right col-md-3">
+                    <td class="text-right col-md-2">
                     @if(!item.Aprobado){
                         <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
                         <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>

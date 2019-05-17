@@ -22,9 +22,9 @@
                 <tbody>
                     @foreach(var detalle in Model){
                         <tr>
-                            <td>@detalle.Producto.Nombre</td>
-                            <td>@detalle.Cantidad</td>
-                            <td>
+                            <td class="col-md-6">@detalle.Producto.Nombre</td>
+                            <td class="col-md-4">@detalle.Cantidad</td>
+                            <td class="col-md-2 text-right">
                                 <a asp-action="" asp-route-id="@detalle.Id" class="btn btn-success"><i class="fa fa-plus"></i></a>
                             </td>
                         </tr>

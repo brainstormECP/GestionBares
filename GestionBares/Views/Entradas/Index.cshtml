@@ -9,11 +9,11 @@
 }
 
 <div class="container-fluid">
-    <h3>Listado de entradas de almacen</h3>
+    <h3>Listado de Entradas de Almacén</h3>
     <hr />
 
     <p>
-        <a class="btn btn-success" asp-action="Create">Nueva entrada</a>
+        <a class="btn btn-success" asp-action="Create">Nueva Entrada</a>
     </p>
     <table class="table dynamic">
         <thead>
@@ -21,13 +21,13 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Producto)
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.Cantidad)
                 </th>
-                <th>
+                <th class="text-center">
                     Bar
                 </th>
-                <th>Efectuado Por</th>
+                <th class="text-center">Efectuado Por</th>
                 <th></th>
             </tr>
         </thead>
@@ -38,13 +38,13 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Producto.Nombre)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Cantidad)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Turno.Bar.Nombre)
                     </td>                   
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Turno.Dependiente.NombreCompleto)
                     </td>
                     <td class="text-right col-md-3">

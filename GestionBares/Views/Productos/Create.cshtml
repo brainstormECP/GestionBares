@@ -1,9 +1,7 @@
 ﻿@model GestionBares.Models.Producto
-
 @{
     ViewData["Title"] = "Create";
 }
-
 
 <div class="container-fluid">
     <h3>Crear Producto</h3>
@@ -12,33 +10,42 @@
         <div class="col-md-12">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-md-4">
-                    <label asp-for="Codigo" class="control-label"></label>
-                    <input asp-for="Codigo" class="form-control" />
-                    <span asp-validation-for="Codigo" class="text-danger"></span>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Codigo" class="control-label"></label>
+                        <input asp-for="Codigo" class="form-control" />
+                        <span asp-validation-for="Codigo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Nombre" class="control-label"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group col-md-4">
-                    <label asp-for="Nombre" class="control-label"></label>
-                    <input asp-for="Nombre" class="form-control" />
-                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="UnidadId" class="control-label"></label>
+                        <select asp-for="UnidadId" class="form-control chosen" asp-items="ViewBag.UnidadId"></select>
+                        <span asp-validation-for="UnidadId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="FamiliaId" class="control-label"></label>
+                        <select asp-for="FamiliaId" class="form-control chosen" asp-items="ViewBag.FamiliaId"></select>
+                        <span asp-validation-for="FamiliaId" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group col-md-4">
-                    <label asp-for="UnidadId" class="control-label"></label>
-                    <select asp-for="UnidadId" class="form-control" asp-items="ViewBag.UnidadId"></select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label asp-for="FamiliaId" class="control-label"></label>
-                    <select asp-for="FamiliaId" class="form-control" asp-items="ViewBag.FamiliaId"></select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label asp-for="Precio" class="control-label"></label>
-                    <input asp-for="Precio" class="form-control" />
-                    <span asp-validation-for="Precio" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-4">
-                    <label asp-for="Costo" class="control-label"></label>
-                    <input asp-for="Costo" class="form-control" />
-                    <span asp-validation-for="Costo" class="text-danger"></span>
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Precio" class="control-label"></label>
+                        <input asp-for="Precio" class="form-control" />
+                        <span asp-validation-for="Precio" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Costo" class="control-label"></label>
+                        <input asp-for="Costo" class="form-control" />
+                        <span asp-validation-for="Costo" class="text-danger"></span>
+                    </div>
                 </div>
                 <div class="form-group col-md-12 text-right">
                     <input type="submit" value="Crear" class="btn btn-success" />
@@ -49,6 +56,9 @@
     </div>
 </div>
 
-@section Scripts {
+@section scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+        });</script>
 }

@@ -14,41 +14,41 @@
     <hr />
     <div class="col-md-12">
         <form asp-action="PorTurno" method="POST" class="form-inline" role="form">
-            <input type="hidden" asp-for="Id"/>
-            <div class="row">
-                <div class="form-group">
-                    <table class="table dynamic">
-                        <thead>
+            <input type="hidden" asp-for="Id" />
+            <div class="row ">
+
+                <table class="table dynamic">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th class="text-center">Unidad</th>
+                            <th class="text-center">Anterior</th>
+                            <th class="text-center">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Detalles.Count; i++)
+                        {
                             <tr>
-                                <th>Producto</th>
-                                <th>Unidad</th>
-                                <th>Anterior</th>                
-                                <th>Cantidad</th>                                
+                                <td>@Model.Detalles[i].Producto</td>
+                                <td class="text-center">@Model.Detalles[i].Unidad</td>
+                                <td class="text-center">@Model.Detalles[i].CantidadAnterior</td>
+                                <td class="text-center">
+                                    <input type="hidden" name="Detalles[@i].ProductoId" value="@Model.Detalles[i].ProductoId" />
+                                    <input class="form-control" name="Detalles[@i].Cantidad" value="@Model.Detalles[i].Cantidad" />
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @for (int i = 0; i < Model.Detalles.Count;i++)
-                            {
-                                <tr>
-                                    <td>@Model.Detalles[i].Producto</td>
-                                    <td>@Model.Detalles[i].Unidad</td>
-                                    <td>@Model.Detalles[i].CantidadAnterior</td>
-                                    <td>
-                                        <input type="hidden" name="Detalles[@i].ProductoId" value="@Model.Detalles[i].ProductoId" />
-                                        <input class="form-control" name="Detalles[@i].Cantidad" value="@Model.Detalles[i].Cantidad" />
-                                    </td>                                    
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>                
-            <button type="submit" class="btn btn-success">Guardar</button>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12 text-right">
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+           
         </form>
     </div>
-    <div class="col-md-12">
-        
-    </div>
+   
 </div>
 @section scripts{
     <script src="~/js/datatables.min.js"></script>

@@ -15,7 +15,7 @@ namespace GestionBares.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
+                .HasAnnotation("ProductVersion", "2.1.2-rtm-30932")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -450,10 +450,10 @@ namespace GestionBares.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "1", ConcurrencyStamp = "b7e4e111-395b-4625-899d-14e2db1f6034", Name = "ADMINISTRADOR", NormalizedName = "ADMINISTRADOR" },
-                        new { Id = "2", ConcurrencyStamp = "6e41b9e0-1b0f-45e2-92e3-9e1909e0276f", Name = "DEPENDIENTE", NormalizedName = "DEPENDIENTE" },
-                        new { Id = "3", ConcurrencyStamp = "b646ee3e-86b1-4f13-9e12-aae7e3db3411", Name = "AUDITOR", NormalizedName = "AUDITOR" },
-                        new { Id = "4", ConcurrencyStamp = "5f6f85c9-654f-4aad-914a-e65056a751a3", Name = "A+B", NormalizedName = "A+B" }
+                        new { Id = "1", ConcurrencyStamp = "ca670a2d-0122-47c7-a47e-502ee9ec5dae", Name = "ADMINISTRADOR", NormalizedName = "ADMINISTRADOR" },
+                        new { Id = "2", ConcurrencyStamp = "06aeef6a-7868-4c6e-98a4-513910ec835f", Name = "DEPENDIENTE", NormalizedName = "DEPENDIENTE" },
+                        new { Id = "3", ConcurrencyStamp = "72213629-4387-46f6-9c06-1c0c284c83e3", Name = "AUDITOR", NormalizedName = "AUDITOR" },
+                        new { Id = "4", ConcurrencyStamp = "73405285-ee03-45dc-ac67-2b3f3e59e328", Name = "A+B", NormalizedName = "A+B" }
                     );
                 });
 

@@ -53,7 +53,7 @@ namespace GestionBares.Controllers
         public IActionResult Create()
         {
             ViewData["BarId"] = new SelectList(_context.Bares, "Id", "Nombre");
-            ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "Nombre");
+            ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "NombreCompleto");
             return View();
         }
 
@@ -73,7 +73,7 @@ namespace GestionBares.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BarId"] = new SelectList(_context.Bares, "Id", "Nombre", turno.BarId);
-            ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "Nombre", turno.DependienteId);
+            ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "NombreCompleto", turno.DependienteId);
             TempData["error"] = "Error en ralizar esta acción";
             return View(turno);
         }
@@ -160,7 +160,7 @@ namespace GestionBares.Controllers
                 return NotFound();
             }
             ViewData["BarId"] = new SelectList(_context.Bares, "Id", "Nombre", turno.BarId);
-            ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "Nombre", turno.DependienteId);
+            ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "NombreCompleto", turno.DependienteId);
             return View(turno);
         }
 
@@ -198,7 +198,7 @@ namespace GestionBares.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BarId"] = new SelectList(_context.Bares, "Id", "Nombre", turno.BarId);
-            ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "Nombre", turno.DependienteId);
+            ViewData["DependienteId"] = new SelectList(_context.Dependientes, "Id", "NombreCompleto", turno.DependienteId);
             TempData["error"] = "Error en ralizar esta acción";
             return View(turno);
         }

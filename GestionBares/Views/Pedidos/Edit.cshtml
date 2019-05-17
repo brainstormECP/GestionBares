@@ -1,16 +1,14 @@
 ﻿@model GestionBares.Models.PedidoAlmacen
-
 @{
     ViewData["Title"] = "Pedido";
 }
-
 
 <div class="container-fluid">
     <h3>Pedido a Almacen</h3>
     <hr />
     <div class="row">
         <div class="col-md-12">
-            @Html.Partial("_DetalleForm", new DetallePedidoAlmacen{PedidoId = Model.Id})
+            @Html.Partial("_DetalleForm", new DetallePedidoAlmacen { PedidoId = Model.Id })
         </div>
         <div class="col-md-12">
             <table class="table">
@@ -22,11 +20,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var detalle in Model.Detalles){
+                    @foreach (var detalle in Model.Detalles)
+                    {
                         <tr>
-                            <td>@detalle.Producto.Nombre</td>
-                            <td>@detalle.Cantidad</td>
-                            <td>
+                            <td class="col-md-6">@detalle.Producto.Nombre</td>
+                            <td class="col-md-4">@detalle.Cantidad</td>
+                            <td class="col-md-2 text-right">
                                 <a asp-action="EliminarDetalle" asp-route-id="@detalle.Id" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
@@ -39,7 +38,6 @@
         </div>
     </div>
 </div>
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

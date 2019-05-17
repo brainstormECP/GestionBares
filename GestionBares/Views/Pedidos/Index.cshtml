@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<GestionBares.Models.PedidoAlmacen>
-
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,13 +6,11 @@
     <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
 }
-
 <div class="container-fluid">
     <h3>Listado de pedidos a almacen</h3>
     <hr />
-
     <p>
-        <a class="btn btn-success" asp-action="Nuevo">Nueva Pedido</a>
+        <a class="btn btn-success" asp-action="Nuevo">Nuevo Pedido</a>
     </p>
     <table class="table dynamic">
         <thead>
@@ -21,10 +18,10 @@
                 <th>
                     Fecha
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.Turno.Dependiente)
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.Turno.Bar)
                 </th>
                 <th></th>
@@ -38,13 +35,13 @@
                         <span class="hidden">@item.Turno.FechaInicio.Ticks</span>
                         @Html.DisplayFor(modelItem => item.Turno.FechaInicio)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Turno.Dependiente.NombreCompleto)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.Turno.Bar.Nombre)
                     </td>
-                    
+
                     <td class="text-right col-md-3">
                         <a data-hint="Editar" class="btn btn-default btn-sm edit hint--top hint--warning" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit" aria-hidden="true"></span></a>
                         <a data-hint="Eliminar" class="btn btn-danger btn-sm delete hint--top hint--error" data-toggle="confirmation" data-title="Confirmar Acción" data-placement="top" data-singleton="true" asp-action="Eliminar" asp-route-id="@item.Id"><span class="fa fa-trash" aria-hidden="true"></span></a>

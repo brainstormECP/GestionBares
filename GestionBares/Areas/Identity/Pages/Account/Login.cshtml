@@ -2,41 +2,33 @@
 @model LoginModel
 
 @{
-    Layout = "_LoginLayout";
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 
-@*<h2>@ViewData["Title"]</h2>*@
-<div class="container-fluid" style="padding-top:100px!important;">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <section>
-                <form method="post">
-                    <h4>Iniciar Sesión</h4>
-                    <hr />
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Input.User">Usuario</label>
-                        <input asp-for="Input.User" class="form-control" />
-                        <span asp-validation-for="Input.User" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Input.Password">Contraseña</label>
-                        <input asp-for="Input.Password" class="form-control" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
 
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-default">Iniciar</button>
-                    </div>
-                    
-                </form>
-            </section>
-        </div>
-      
+<br />
+<form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <h1 style="color:white!important;">Bienvenido(a)</h1>
+    <div>
+        <input asp-for="Input.User" type="text" class="form-control" placeholder="Usuario" required="" />
     </div>
-</div>
+    <div>
+        <input asp-for="Input.Password" type="password" class="form-control" placeholder="Contraseña" required="" />
+    </div>
+    <div>
+        <button class="btn btn-success submit" type="submit">Iniciar Sesión</button>
+    </div>
 
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-    }
+    <div class="clearfix" style="color:white!important;"></div>
+
+    <div class="separator">
+
+
+        <div>
+            <p style="color:white!important;">©2019 - Univerisdad de Matanzas</p>
+        </div>
+    </div>
+</form>

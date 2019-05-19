@@ -113,20 +113,24 @@ namespace GestionBares.Utils
         public List<MovimientoVM> ExistenciaVentaDeBarPorTurno(int turnoId)
         {
             var turno = _db.Set<Turno>().FirstOrDefault(t => t.Id == turnoId);
-            var turnoAnterior = _db.Set<Turno>().Where(t => t.Id != turnoId && t.BarId == turno.BarId).OrderBy(t => t.FechaFin).Last();
+            var turnoAnterior = _db.Set<Turno>().Any(t => t.Id != turnoId && t.BarId == turno.BarId) ? _db.Set<Turno>().Where(t => t.Id != turnoId && t.BarId == turno.BarId).OrderBy(t => t.FechaFin).Last() : null;
             var result = new List<MovimientoVM>();
+            if (turnoAnterior == null)
+            {
+                turnoAnterior = new Turno { Id = 0, BarId = 0 };
+            }
             var ultimoControl = _db.Set<ControlExistenciaVenta>()
                 .Any(c => c.TurnoId == turnoAnterior.Id) ? _db.Set<ControlExistenciaVenta>()
                 .Include(c => c.Detalles).ThenInclude(c => c.Producto)
                 .Where(c => c.TurnoId == turnoAnterior.Id).OrderBy(c => c.Fecha).Last() : null;
-            if (ultimoControl == null)
+            if (ultimoControl != null)
             {
-                return new List<MovimientoVM>();
+                foreach (var detalle in ultimoControl.Detalles)
+                {
+                    result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Inicio = detalle.Cantidad, Costo = detalle.Costo, Precio = detalle.Precio });
+                }
             }
-            foreach (var detalle in ultimoControl.Detalles)
-            {
-                result.Add(new MovimientoVM { ProductoId = detalle.ProductoId, Producto = detalle.Producto.Nombre, Inicio = detalle.Cantidad, Costo = detalle.Costo, Precio = detalle.Precio });
-            }
+
             var entradas = _db.Set<EntregaDeAlmacenVenta>()
                 .Include(e => e.Producto)
                 .Where(e => e.TurnoId == turnoId);

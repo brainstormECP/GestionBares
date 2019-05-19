@@ -9,7 +9,7 @@ namespace GestionBares.ViewModels
         public double Enviados { get; set; }
         public double Recibidos { get; set; }
         public double Fin { get; set; }
-        public double Consumo { get { return Inicio + Entradas - Enviados + Recibidos - Fin; } }
+        public double Consumo { get { return Inicio + Entradas - Enviados + Recibidos - Fin < 0 ? 0 : Inicio + Entradas - Enviados + Recibidos - Fin; } }
         public decimal Costo { get; set; }
         public decimal Precio { get; set; }
     }

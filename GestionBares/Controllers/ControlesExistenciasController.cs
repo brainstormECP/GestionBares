@@ -17,10 +17,12 @@ namespace GestionBares.Controllers
     public class ControlesExistenciasController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ExistenciasService _existenciaService;
 
         public ControlesExistenciasController(ApplicationDbContext context)
         {
             _context = context;
+            _existenciaService = new ExistenciasService(context);
         }
 
         // GET: ControlesExistencias
@@ -113,21 +115,7 @@ namespace GestionBares.Controllers
             {
                 return NotFound();
             }
-            var existenciaAnterior = _context.Set<ControlExistencia>()
-                .Include(c => c.Turno)
-                .Any(d => d.Turno.BarId == control.Turno.BarId && d.Id != control.Id && d.Fecha < control.Fecha) ?
-                _context.Set<ControlExistencia>()
-                .Include(c => c.Turno)
-                .Include(c => c.Detalles)
-                .Where(d => d.Turno.BarId == control.Turno.BarId && d.Id != control.Id && d.Fecha < control.Fecha)
-                .OrderBy(d => d.Fecha)
-                .Last().Detalles
-                .Select(d => new DetalleExistenciaVM
-                {
-                    ProductoId = d.ProductoId,
-                    Cantidad = d.Cantidad
-                })
-                .ToList() : new List<DetalleExistenciaVM>();
+            var existenciaAnterior = _existenciaService.ExistenciaAnterior(control.Turno.BarId, control.Id, control.Fecha);
             var productos = _context.Set<Producto>()
                 .Where(p => _context.Set<Standard>()
                     .Any(s => s.ProductoId == p.Id && s.BarId == control.Turno.BarId)

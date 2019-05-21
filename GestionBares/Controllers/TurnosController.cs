@@ -151,6 +151,20 @@ namespace GestionBares.Controllers
         public IActionResult Cerrar(int id)
         {
             var turno = _context.Set<Turno>().SingleOrDefault(t => t.Id == id);
+            var trasladosEntradasVenta = _context.Set<TrasladoVenta>()
+                .Where(t => t.Fecha >= turno.FechaInicio && t.Fecha <= (turno.FechaFin ?? DateTime.Now) && t.DestinoId == turno.BarId && !t.Aprobado);
+            var trasladosEntradas = _context.Set<Traslado>()
+                .Where(t => t.Fecha >= turno.FechaInicio && t.Fecha <= (turno.FechaFin ?? DateTime.Now) && t.DestinoId == turno.BarId && !t.Aprobado);
+            if (_context.Set<Traslado>().Any(t => t.TurnoId == id && !t.Aprobado)
+                || _context.Set<TrasladoVenta>().Any(t => t.TurnoId == id && !t.Aprobado)
+                || trasladosEntradas.Any()
+                || trasladosEntradasVenta.Any()
+                )
+            {
+                TempData["error"] = "No se puede cerrar un turno con traslados pendientes.";
+                ViewBag.TurnoId = turno.Id;
+                return View();
+            }
             turno.FechaFin = DateTime.Now;
             turno.Activo = false;
             foreach (var control in _context.Set<ControlExistencia>().Where(c => c.TurnoId == id))

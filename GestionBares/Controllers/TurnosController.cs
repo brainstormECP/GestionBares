@@ -16,10 +16,12 @@ namespace GestionBares.Controllers
     public class TurnosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ExistenciasService _existenciaService;
 
         public TurnosController(ApplicationDbContext context)
         {
             _context = context;
+            _existenciaService = new ExistenciasService(context);
         }
 
         // GET: Turnos
@@ -103,6 +105,24 @@ namespace GestionBares.Controllers
                 turno.Activo = true;
                 turno.FechaInicio = DateTime.Now;
                 _context.Add(turno);
+                var control = new ControlExistencia
+                {
+                    Turno = turno,
+                    Fecha = DateTime.Now,
+                    Activo = true,
+                };
+                var existenciasAnteriores = _existenciaService.ExistenciaAnterior(turno.BarId, 0, DateTime.Now);
+                control.Detalles = existenciasAnteriores.Select(e => new DetalleControlExistencia { ProductoId = e.ProductoId, Cantidad = e.Cantidad, Costo = _context.Set<Producto>().Find(e.ProductoId).Costo }).ToList();
+                _context.Add(control);
+                var controlVenta = new ControlExistenciaVenta
+                {
+                    Turno = turno,
+                    Fecha = DateTime.Now,
+                    Activo = true,
+                };
+                var existenciasVentaAnteriores = _existenciaService.ExistenciaVentaAnterior(turno.BarId, 0, DateTime.Now);
+                controlVenta.Detalles = existenciasVentaAnteriores.Select(e => new DetalleControlExistenciaVenta { ProductoId = e.ProductoId, Cantidad = e.Cantidad, Costo = _context.Set<Producto>().Find(e.ProductoId).Costo, Precio = _context.Set<Producto>().Find(e.ProductoId).Precio }).ToList();
+                _context.Add(controlVenta);
                 _context.SaveChanges();
                 TempData["exito"] = "La acción se ha realizado correctamente";
                 return RedirectToAction("Index", "Home");

@@ -207,5 +207,45 @@ namespace GestionBares.Utils
             }
             return turnoAnterior;
         }
+
+        public List<DetalleExistenciaVM> ExistenciaAnterior(int barId, int controlId, DateTime fecha)
+        {
+            var existenciaAnterior = _db.Set<ControlExistencia>()
+                .Include(c => c.Turno)
+                .Any(d => d.Turno.BarId == barId && d.Id != controlId && d.Fecha < fecha) ?
+                _db.Set<ControlExistencia>()
+                .Include(c => c.Turno)
+                .Include(c => c.Detalles)
+                .Where(d => d.Turno.BarId == barId && d.Id != controlId && d.Fecha < fecha)
+                .OrderBy(d => d.Fecha)
+                .Last().Detalles
+                .Select(d => new DetalleExistenciaVM
+                {
+                    ProductoId = d.ProductoId,
+                    Cantidad = d.Cantidad
+                })
+                .ToList() : new List<DetalleExistenciaVM>();
+            return existenciaAnterior;
+        }
+
+        public List<DetalleExistenciaVM> ExistenciaVentaAnterior(int barId, int controlId, DateTime fecha)
+        {
+            var existenciaAnterior = _db.Set<ControlExistenciaVenta>()
+                .Include(c => c.Turno)
+                .Any(d => d.Turno.BarId == barId && d.Id != controlId && d.Fecha < fecha) ?
+                _db.Set<ControlExistenciaVenta>()
+                .Include(c => c.Turno)
+                .Include(c => c.Detalles)
+                .Where(d => d.Turno.BarId == barId && d.Id != controlId && d.Fecha < fecha)
+                .OrderBy(d => d.Fecha)
+                .Last().Detalles
+                .Select(d => new DetalleExistenciaVM
+                {
+                    ProductoId = d.ProductoId,
+                    Cantidad = d.Cantidad
+                })
+                .ToList() : new List<DetalleExistenciaVM>();
+            return existenciaAnterior;
+        }
     }
 }

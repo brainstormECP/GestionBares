@@ -296,6 +296,24 @@ namespace GestionBares.Controllers
             return View(result);
         }
 
+        public IActionResult ResumenControles()
+        {
+            var controles = _context.Set<ControlExistencia>()
+                .Include(c => c.Turno.Dependiente)
+                .Include(c => c.Turno.Bar)
+                .Where(c => !c.Activo);
+            return View(controles);
+        }
+
+        public IActionResult ResumenVentas()
+        {
+            var controles = _context.Set<ControlExistenciaVenta>()
+                .Include(c => c.Turno.Dependiente)
+                .Include(c => c.Turno.Bar)
+                .Where(c => !c.Activo);
+            return View(controles);
+        }
+
         #region Helpers
         private List<string> GetColor()
         {

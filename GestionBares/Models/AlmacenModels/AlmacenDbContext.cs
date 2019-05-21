@@ -45,5 +45,6 @@ namespace GestionBares.Models.AlmacenModels
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Existencia> Existencias { get; set; }
+        public DbSet<Control> Controles { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace GestionBares.Models
         public virtual Turno Turno { get; set; }
         public DateTime Fecha { get; set; }
         public bool Activo { get; set; }
+        public bool Aprobado { get; set; }
         public virtual ICollection<DetalleControlExistencia> Detalles { get; set; }
         public ControlExistencia()
         {

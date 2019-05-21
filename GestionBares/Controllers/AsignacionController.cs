@@ -14,7 +14,7 @@ using System.Drawing;
 
 namespace GestionBares.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = DefinicionRoles.AmasB)]
     public class AsignacionController : Controller
     {
         private readonly ApplicationDbContext _context;

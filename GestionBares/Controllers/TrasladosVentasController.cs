@@ -13,7 +13,7 @@ using GestionBares.Utils;
 
 namespace GestionBares.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = DefinicionRoles.Dependiente)]
     public class TrasladosVentasController : Controller
     {
         private readonly ApplicationDbContext _context;

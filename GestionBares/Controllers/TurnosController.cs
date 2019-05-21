@@ -12,7 +12,7 @@ using GestionBares.Utils;
 
 namespace GestionBares.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = DefinicionRoles.Dependiente + "," + DefinicionRoles.Administrador)]
     public class TurnosController : Controller
     {
         private readonly ApplicationDbContext _context;

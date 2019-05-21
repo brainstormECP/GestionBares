@@ -8,10 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using GestionBares.Data;
 using GestionBares.Models;
 using Microsoft.AspNetCore.Authorization;
+using GestionBares.Utils;
 
 namespace GestionBares.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = DefinicionRoles.AmasB)]
     public class UnidadesDeMedidasController : Controller
     {
         private readonly ApplicationDbContext _context;

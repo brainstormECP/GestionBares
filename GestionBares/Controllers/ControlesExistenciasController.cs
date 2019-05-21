@@ -13,7 +13,7 @@ using GestionBares.ViewModels;
 
 namespace GestionBares.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = DefinicionRoles.Dependiente)]
     public class ControlesExistenciasController : Controller
     {
         private readonly ApplicationDbContext _context;

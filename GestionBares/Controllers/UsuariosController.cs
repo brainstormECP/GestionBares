@@ -15,7 +15,7 @@ using GestionBares.Utils;
 
 namespace GestionBares.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = DefinicionRoles.Administrador)]
     public class UsuariosController : Controller
     {
         DbContext _db;

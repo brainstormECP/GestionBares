@@ -9,10 +9,11 @@ using GestionBares.Data;
 using GestionBares.Models;
 using Microsoft.AspNetCore.Authorization;
 using GestionBares.ViewModels;
+using GestionBares.Utils;
 
 namespace GestionBares.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = DefinicionRoles.AmasB)]
     public class BaresController : Controller
     {
         private readonly ApplicationDbContext _context;

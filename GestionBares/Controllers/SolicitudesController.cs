@@ -15,7 +15,7 @@ using GestionBares.Models.AlmacenModels;
 
 namespace GestionBares.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = DefinicionRoles.AmasB)]
     public class SolicitudesController : Controller
     {
         private readonly ApplicationDbContext _context;

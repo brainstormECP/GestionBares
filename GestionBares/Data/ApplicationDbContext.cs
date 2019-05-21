@@ -28,6 +28,7 @@ namespace GestionBares.Data
                 new IdentityRole {Id = "2", Name = DefinicionRoles.Dependiente, NormalizedName = DefinicionRoles.Dependiente },
                 new IdentityRole {Id = "3", Name = DefinicionRoles.Auditor, NormalizedName = DefinicionRoles.Auditor },
                 new IdentityRole {Id = "4", Name = DefinicionRoles.AmasB, NormalizedName = DefinicionRoles.AmasB },
+                new IdentityRole {Id = "5", Name = DefinicionRoles.Economia, NormalizedName = DefinicionRoles.Economia },
              });
             modelBuilder.Entity<Usuario>().HasData(new Usuario
             {

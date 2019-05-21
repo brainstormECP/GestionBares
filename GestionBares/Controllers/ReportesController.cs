@@ -87,23 +87,36 @@ namespace GestionBares.Controllers
             var colors = GetColor();
             var turnosEnPeriodo = _context.Set<Turno>().Where(t => t.FechaInicio >= parametros.FechaInicio && t.FechaInicio <= parametros.FechaFin).ToList();
             var index = 0;
+            var labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).GroupBy(t => t.FechaInicio.Date).Select(t => t.Key.ToShortDateString()).ToList();
             var datosCosto = new DatosGraficas()
             {
-                Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
+                Labels = labels,
             };
             var datosVentas = new DatosGraficas()
             {
-                Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
+                Labels = labels,
             };
             index = 0;
             foreach (var barId in parametros.Bares)
             {
                 var bar = _context.Set<Bar>().Find(barId);
-                var ventas = turnosEnPeriodo.Where(t => t.BarId == barId).Select(c => new
+                var ventas = new List<ResumenVentas>();
+                foreach (var turno in turnosEnPeriodo.Where(t => t.BarId == barId))
                 {
-                    Fecha = c.FechaInicio,
-                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Precio),
-                    Costos = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Costo),
+                    var resumen = existenciaService.ExistenciaVentaDeBarPorTurno(turno.Id).ToList();
+                    ventas.Add(new ResumenVentas
+                    {
+                        TurnoId = turno.Id,
+                        Fecha = turno.FechaInicio.Date,
+                        Ventas = resumen.Sum(e => e.Consumo * (double)e.Precio),
+                        Costos = resumen.Sum(e => e.Consumo * (double)e.Costo),
+                    });
+                }
+                ventas = ventas.GroupBy(v => v.Fecha).Select(v => new ResumenVentas
+                {
+                    Fecha = v.Key,
+                    Ventas = v.Sum(r => r.Ventas),
+                    Costos = v.Sum(r => r.Costos)
                 }).ToList();
                 datosVentas.Datasets.Add(new Dataset
                 {
@@ -111,7 +124,7 @@ namespace GestionBares.Controllers
                     BackgroundColor = colors[index],
                     BorderColor = colors[index],
                     Fill = false,
-                    Data = datosVentas.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Ventas) : 0).ToList()
+                    Data = labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Ventas) : 0).ToList()
                 });
                 datosCosto.Datasets.Add(new Dataset
                 {
@@ -119,7 +132,7 @@ namespace GestionBares.Controllers
                     BackgroundColor = colors[index],
                     BorderColor = colors[index],
                     Fill = false,
-                    Data = datosCosto.Labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costos) : 0).ToList()
+                    Data = labels.Select(c => ventas.Any(d => d.Fecha.ToShortDateString() == c) ? ventas.Where(d => d.Fecha.ToShortDateString() == c).Sum(s => s.Costos) : 0).ToList()
                 });
                 index++;
             }
@@ -144,24 +157,38 @@ namespace GestionBares.Controllers
             var colors = GetColor();
             var turnosEnPeriodo = _context.Set<Turno>().Where(t => t.FechaInicio >= parametros.FechaInicio && t.FechaInicio <= parametros.FechaFin).ToList();
             var index = 0;
+            var labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).GroupBy(t => t.FechaInicio.Date).Select(t => t.Key.ToShortDateString()).ToList();
             var datosCosto = new DatosGraficas()
             {
-                Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
+                Labels = labels,
             };
             var datosVentas = new DatosGraficas()
             {
-                Labels = turnosEnPeriodo.OrderBy(t => t.FechaInicio).Select(t => t.FechaInicio.ToShortDateString()).ToList(),
+                Labels = labels,
             };
             index = 0;
             foreach (var dependienteId in parametros.Dependientes)
             {
                 var dependiente = _context.Set<Dependiente>().Find(dependienteId);
-                var ventas = turnosEnPeriodo.Where(t => t.BarId == dependienteId).Select(c => new
+                var ventas = new List<ResumenVentas>();
+                foreach (var turno in turnosEnPeriodo.Where(t => t.DependienteId == dependienteId))
                 {
-                    Fecha = c.FechaInicio,
-                    Ventas = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Precio),
-                    Costos = existenciaService.ExistenciaVentaDeBarPorTurno(c.Id).Sum(e => e.Consumo * (double)e.Costo),
+                    var resumen = existenciaService.ExistenciaVentaDeBarPorTurno(turno.Id).ToList();
+                    ventas.Add(new ResumenVentas
+                    {
+                        TurnoId = turno.Id,
+                        Fecha = turno.FechaInicio.Date,
+                        Ventas = resumen.Sum(e => e.Consumo * (double)e.Precio),
+                        Costos = resumen.Sum(e => e.Consumo * (double)e.Costo),
+                    });
+                }
+                ventas = ventas.GroupBy(v => v.Fecha).Select(v => new ResumenVentas
+                {
+                    Fecha = v.Key,
+                    Ventas = v.Sum(r => r.Ventas),
+                    Costos = v.Sum(r => r.Costos)
                 }).ToList();
+
                 datosVentas.Datasets.Add(new Dataset
                 {
                     Label = dependiente.NombreCompleto,

@@ -26,7 +26,7 @@ namespace GestionBares.Utils
         public List<MovimientoVM> ExistenciaDeBarPorTurno(int turnoId)
         {
             var turno = _db.Set<Turno>().FirstOrDefault(t => t.Id == turnoId);
-            var turnoAnterior = _db.Set<Turno>().Where(t => t.Id != turnoId && t.BarId == turno.BarId).OrderBy(t => t.FechaFin).Last();
+            var turnoAnterior = GetTurnoAnterior(turnoId);
             var result = new List<MovimientoVM>();
             var ultimoControl = _db.Set<ControlExistencia>()
                 .Any(c => c.TurnoId == turnoAnterior.Id) ? _db.Set<ControlExistencia>()
@@ -113,12 +113,8 @@ namespace GestionBares.Utils
         public List<MovimientoVM> ExistenciaVentaDeBarPorTurno(int turnoId)
         {
             var turno = _db.Set<Turno>().FirstOrDefault(t => t.Id == turnoId);
-            var turnoAnterior = _db.Set<Turno>().Any(t => t.Id != turnoId && t.BarId == turno.BarId) ? _db.Set<Turno>().Where(t => t.Id != turnoId && t.BarId == turno.BarId).OrderBy(t => t.FechaFin).Last() : null;
+            var turnoAnterior = GetTurnoAnterior(turnoId);
             var result = new List<MovimientoVM>();
-            if (turnoAnterior == null)
-            {
-                turnoAnterior = new Turno { Id = 0, BarId = 0 };
-            }
             var ultimoControl = _db.Set<ControlExistenciaVenta>()
                 .Any(c => c.TurnoId == turnoAnterior.Id) ? _db.Set<ControlExistenciaVenta>()
                 .Include(c => c.Detalles).ThenInclude(c => c.Producto)
@@ -195,5 +191,21 @@ namespace GestionBares.Utils
             return result;
         }
 
+        //helpers
+        private Turno GetTurnoAnterior(int turnoId)
+        {
+            var turno = _db.Set<Turno>().FirstOrDefault(t => t.Id == turnoId);
+            var turnoAnterior = _db.Set<Turno>()
+                .Any(t => t.Id != turnoId && t.BarId == turno.BarId && t.FechaInicio < turno.FechaInicio)
+                ? _db.Set<Turno>()
+                    .Where(t => t.Id != turnoId && t.BarId == turno.BarId && t.FechaInicio < turno.FechaInicio)
+                    .OrderBy(t => t.FechaFin).Last()
+                : null;
+            if (turnoAnterior == null)
+            {
+                turnoAnterior = new Turno { Id = 0, BarId = 0 };
+            }
+            return turnoAnterior;
+        }
     }
 }

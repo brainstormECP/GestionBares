@@ -91,17 +91,20 @@ namespace GestionBares.Controllers
                 if (result.Result.Succeeded)
                 {
                     _logger.LogInformation("Usuario creado correctamente.");
-                    _userManager.AddToRoleAsync(user, DefinicionRoles.Dependiente);
-
-                    _context.Add(new Dependiente
+                    var resultRole = _userManager.AddToRoleAsync(user, DefinicionRoles.Dependiente);
+                    if (resultRole.Result.Succeeded)
                     {
-                        Nombres = dependiente.Nombres,
-                        Apellidos = dependiente.Apellidos,
-                        Usuario = user,
-                        Activo = true,
-                    });
-                    _context.SaveChanges();
-                    TempData["exito"] = "La acción se ha realizado correctamente";
+                        _context.Add(new Dependiente
+                        {
+                            Nombres = dependiente.Nombres,
+                            Apellidos = dependiente.Apellidos,
+                            Usuario = user,
+                            Activo = true,
+                        });
+                        _context.SaveChanges();
+                        TempData["exito"] = "La acción se ha realizado correctamente";
+                    }
+                    TempData["error"] = "Error agregando rol";
                     return RedirectToAction(nameof(Index));
                 }
                 foreach (var error in result.Result.Errors)

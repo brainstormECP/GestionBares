@@ -15,7 +15,7 @@ using GestionBares.Models.AlmacenModels;
 
 namespace GestionBares.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = DefinicionRoles.Economia)]
     public class AprobacionEconomiaController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,29 +25,6 @@ namespace GestionBares.Controllers
         {
             _context = context;
             _almacen = new AlmacenDbContext();
-        }
-
-        // GET: Traslados
-        public IActionResult Productos()
-        {
-            var existencias = _almacen.Set<Existencia>().ToList();
-            var pedidos = _context.Set<DetallePedidoAlmacen>()
-                .Include(t => t.Pedido.Turno.Bar)
-                .Include(t => t.Pedido.Turno.Dependiente)
-                .Include(t => t.Producto)
-                .Where(t => !t.Atendido)
-                .Select(t => new SolicitudVM
-                {
-                    Id = t.Id,
-                    Producto = t.Producto.Nombre,
-                    ProductoId = t.ProductoId,
-                    Bar = t.Pedido.Turno.Bar.Nombre,
-                    BarId = t.Pedido.Turno.BarId,
-                    Cantidad = t.Cantidad,
-                    EnAlmacen = existencias.Any(e => e.CodigoProducto == t.Producto.Codigo) ? existencias.SingleOrDefault(e => e.CodigoProducto == t.Producto.Codigo).Cantidad : 0,
-                })
-                .ToList();
-            return View(pedidos);
         }
 
         public IActionResult Aprobar(int id, string url)

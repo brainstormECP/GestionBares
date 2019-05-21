@@ -102,6 +102,10 @@
                     {
                         @Html.Partial("menus/_ABMenu")
                     }
+                    @if (User.IsInRole(DefinicionRoles.Economia))
+                    {
+                        @Html.Partial("menus/_EconomiaMenu")
+                    }
                 </ul>
             </section>
             <!-- /.sidebar -->

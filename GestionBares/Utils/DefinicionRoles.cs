@@ -6,5 +6,6 @@ namespace GestionBares.Utils
         public const string Dependiente = "DEPENDIENTE";
         public const string Auditor = "AUDITOR";
         public const string AmasB = "A+B";
+        public const string Economia = "ECONOMIA";
     }
 }

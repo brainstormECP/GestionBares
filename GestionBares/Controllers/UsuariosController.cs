@@ -76,19 +76,19 @@ namespace GestionBares.Controllers
                 return View(model);
             }
 
-            var user = _db.Set<Usuario>().Find(model.Id);
+            var user = _userManager.FindByIdAsync(model.Id).Result;
             if (user == null)
             {
                 throw new ApplicationException($"No se encontro usuario con ID '{_userManager.GetUserId(User)}'.");
             }
-
-            var addPasswordResult = _userManager.AddPasswordAsync(user, model.NewPassword).Result;
-            if (!addPasswordResult.Succeeded)
+            var newPassword = _userManager.PasswordHasher.HashPassword(user, model.NewPassword);
+            user.PasswordHash = newPassword;
+            var res = _userManager.UpdateAsync(user).Result;
+            if (!res.Succeeded)
             {
-                TempData["error"] = "Error al resetear la contraseña";
+                TempData["error"] = "Error al resetear la contraseña. " + String.Join(",", res.Errors.Select(e => e.Description));
                 return View(model);
             }
-
             //await _signInManager.SignInAsync(user, isPersistent: false);
             TempData["exito"] = "Contraseña cambiada correctamente";
             return RedirectToAction(nameof(Index));

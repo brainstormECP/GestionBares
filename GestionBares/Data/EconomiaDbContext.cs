@@ -11,7 +11,7 @@ namespace GestionBares.Data
 {
     public class EconomiaDbContext : IdentityDbContext
     {
-        public EconomiaDbContext(DbContextOptions<ApplicationDbContext> options)
+        public EconomiaDbContext(DbContextOptions<EconomiaDbContext> options)
             : base(options)
         {
         }

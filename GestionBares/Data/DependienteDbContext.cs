@@ -11,7 +11,7 @@ namespace GestionBares.Data
 {
     public class DependienteDbContext : IdentityDbContext
     {
-        public DependienteDbContext(DbContextOptions<ApplicationDbContext> options)
+        public DependienteDbContext(DbContextOptions<DependienteDbContext> options)
             : base(options)
         {
         }

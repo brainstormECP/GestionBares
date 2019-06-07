@@ -11,7 +11,7 @@ namespace GestionBares.Data
 {
     public class AdministradorDbContext : IdentityDbContext
     {
-        public AdministradorDbContext(DbContextOptions<ApplicationDbContext> options)
+        public AdministradorDbContext(DbContextOptions<AdministradorDbContext> options)
             : base(options)
         {
         }

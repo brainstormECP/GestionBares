@@ -11,7 +11,7 @@ namespace GestionBares.Data
 {
     public class AmasBDbContext : IdentityDbContext
     {
-        public AmasBDbContext(DbContextOptions<ApplicationDbContext> options)
+        public AmasBDbContext(DbContextOptions<AmasBDbContext> options)
             : base(options)
         {
         }

@@ -18,10 +18,10 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.Economia)]
     public class AprobacionEconomiaController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly EconomiaDbContext _context;
         private readonly AlmacenDbContext _almacen;
 
-        public AprobacionEconomiaController(ApplicationDbContext context)
+        public AprobacionEconomiaController(EconomiaDbContext context)
         {
             _context = context;
             _almacen = new AlmacenDbContext();

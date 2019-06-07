@@ -15,10 +15,10 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.Dependiente + "," + DefinicionRoles.Administrador)]
     public class TurnosController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DependienteDbContext _context;
         private readonly ExistenciasService _existenciaService;
 
-        public TurnosController(ApplicationDbContext context)
+        public TurnosController(DependienteDbContext context)
         {
             _context = context;
             _existenciaService = new ExistenciasService(context);

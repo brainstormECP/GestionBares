@@ -16,9 +16,9 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.Dependiente)]
     public class TrasladosController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DependienteDbContext _context;
 
-        public TrasladosController(ApplicationDbContext context)
+        public TrasladosController(DependienteDbContext context)
         {
             _context = context;
         }

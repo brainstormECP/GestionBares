@@ -16,10 +16,10 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.Dependiente)]
     public class ControlesExistenciasController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DependienteDbContext _context;
         private readonly ExistenciasService _existenciaService;
 
-        public ControlesExistenciasController(ApplicationDbContext context)
+        public ControlesExistenciasController(DependienteDbContext context)
         {
             _context = context;
             _existenciaService = new ExistenciasService(context);

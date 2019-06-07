@@ -18,10 +18,10 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.AmasB)]
     public class SolicitudesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AmasBDbContext _context;
         private readonly AlmacenDbContext _almacen;
 
-        public SolicitudesController(ApplicationDbContext context)
+        public SolicitudesController(AmasBDbContext context)
         {
             _context = context;
             _almacen = new AlmacenDbContext();

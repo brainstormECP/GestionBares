@@ -16,9 +16,9 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.Dependiente)]
     public class PedidosController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DependienteDbContext _context;
 
-        public PedidosController(ApplicationDbContext context)
+        public PedidosController(DependienteDbContext context)
         {
             _context = context;
         }

@@ -15,9 +15,9 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.AmasB)]
     public class FamiliasDeProductosController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AmasBDbContext _context;
 
-        public FamiliasDeProductosController(ApplicationDbContext context)
+        public FamiliasDeProductosController(AmasBDbContext context)
         {
             _context = context;
         }

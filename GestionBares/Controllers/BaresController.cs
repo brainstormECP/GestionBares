@@ -16,9 +16,9 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.AmasB)]
     public class BaresController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AmasBDbContext _context;
 
-        public BaresController(ApplicationDbContext context)
+        public BaresController(AmasBDbContext context)
         {
             _context = context;
         }

@@ -16,9 +16,9 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.Dependiente)]
     public class EntradasVentasController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DependienteDbContext _context;
 
-        public EntradasVentasController(ApplicationDbContext context)
+        public EntradasVentasController(DependienteDbContext context)
         {
             _context = context;
         }

@@ -17,9 +17,9 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.AmasB)]
     public class AsignacionController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AmasBDbContext _context;
 
-        public AsignacionController(ApplicationDbContext context)
+        public AsignacionController(AmasBDbContext context)
         {
             _context = context;
         }

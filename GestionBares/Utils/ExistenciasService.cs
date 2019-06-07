@@ -10,9 +10,9 @@ namespace GestionBares.Utils
 {
     public class ExistenciasService
     {
-        private readonly ApplicationDbContext _db;
+        private readonly DbContext _db;
 
-        public ExistenciasService(ApplicationDbContext context)
+        public ExistenciasService(DbContext context)
         {
             _db = context;
         }

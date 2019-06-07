@@ -15,9 +15,9 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.AmasB)]
     public class UnidadesDeMedidasController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AmasBDbContext _context;
 
-        public UnidadesDeMedidasController(ApplicationDbContext context)
+        public UnidadesDeMedidasController(AmasBDbContext context)
         {
             _context = context;
         }

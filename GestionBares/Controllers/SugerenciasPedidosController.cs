@@ -16,10 +16,10 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.Dependiente)]
     public class SugerenciasPedidosController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DependienteDbContext _context;
         private readonly SugerenciasPedidos _sugerencias;
 
-        public SugerenciasPedidosController(ApplicationDbContext context)
+        public SugerenciasPedidosController(DependienteDbContext context)
         {
             _context = context;
             _sugerencias = new SugerenciasPedidos(context);

@@ -16,9 +16,9 @@ namespace GestionBares.Controllers
     [Authorize(Roles = DefinicionRoles.Dependiente)]
     public class ControlesExistenciasVentasController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DependienteDbContext _context;
 
-        public ControlesExistenciasVentasController(ApplicationDbContext context)
+        public ControlesExistenciasVentasController(DependienteDbContext context)
         {
             _context = context;
         }

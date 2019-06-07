@@ -19,9 +19,9 @@ namespace GestionBares.Controllers
     public class DependientesController : Controller
     {
         private readonly UserManager<Usuario> _userManager;
-        private readonly ApplicationDbContext _context;
+        private readonly AmasBDbContext _context;
         public ILogger<Usuario> _logger { get; set; }
-        public DependientesController(ApplicationDbContext context, UserManager<Usuario> userManager, ILogger<Usuario> logger)
+        public DependientesController(AmasBDbContext context, UserManager<Usuario> userManager, ILogger<Usuario> logger)
         {
             _context = context;
             _userManager = userManager;

@@ -40,7 +40,21 @@ namespace GestionBares
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddDbContext<AdministradorDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("AdministradorConnection")));
+            services.AddDbContext<AuditorDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("AuditorConnection")));
+            services.AddDbContext<AmasBDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("AmasBConnection")));
+            services.AddDbContext<EconomiaDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("EconomiaConnection")));
+            services.AddDbContext<DependienteDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DependienteConnection")));
             services.AddDbContext<AlmacenDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("AlmacenConnection")));
@@ -50,6 +64,11 @@ namespace GestionBares
             services.AddTransient<UsuarioSignInManager>();
 
             services.AddTransient<DbContext, ApplicationDbContext>();
+            services.AddTransient<AdministradorDbContext>();
+            services.AddTransient<AuditorDbContext>();
+            services.AddTransient<AmasBDbContext>();
+            services.AddTransient<DependienteDbContext>();
+            services.AddTransient<EconomiaDbContext>();
 
             services.AddMvc().AddRazorPagesOptions(options =>
             {

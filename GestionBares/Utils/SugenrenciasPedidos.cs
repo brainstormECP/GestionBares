@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GestionBares.Data;
 using GestionBares.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionBares.Utils
 {
@@ -15,10 +16,10 @@ namespace GestionBares.Utils
     }
     public class SugerenciasPedidos
     {
-        private ApplicationDbContext _db;
+        private DbContext _db;
         private ExistenciasService _existenciaService;
 
-        public SugerenciasPedidos(ApplicationDbContext context)
+        public SugerenciasPedidos(DbContext context)
         {
             _db = context;
             _existenciaService = new ExistenciasService(context);

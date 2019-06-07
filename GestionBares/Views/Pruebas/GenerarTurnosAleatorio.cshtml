@@ -1,0 +1,66 @@
+@model GestionBares.ViewModels.Pruebas
+@{
+    ViewData["Title"] = "GenerarTurnosAleatorio";
+}
+<h2>Generar Turnos Aleatorios</h2>
+
+<div class="container-fluid">
+    <h3>Crear Pruebas</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="GenerarTurnosAleatorio">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Bares" class="control-label"></label>
+                    <select id="bar" asp-for="Bares" class="form-control chosen" asp-items="ViewBag.Bares"></select>
+                    
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Dependientes" class="control-label"></label>
+                    <select id="bar" asp-for="Dependientes" class="form-control chosen" asp-items="ViewBag.Dependientes"></select>
+                    
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="CantidadDeTurnos" class="control-label"></label>
+                    <input asp-for="CantidadDeTurnos" class="form-control" />
+                    <span asp-validation-for="CantidadDeTurnos" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="FechaInicio" class="control-label"></label>
+                    <input type="date" asp-for="FechaInicio" class="form-control" />
+                    <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="FechaFin" class="control-label"></label>
+                    <input type="date" asp-for="FechaFin" class="form-control" />
+                    <span asp-validation-for="FechaFin" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="CantidadMinima" class="control-label"></label>
+                    <input asp-for="CantidadMinima" class="form-control" />
+                    <span asp-validation-for="CantidadMinima" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="CantidadMaxima" class="control-label"></label>
+                    <input asp-for="CantidadMaxima" class="form-control" />
+                    <span asp-validation-for="CantidadMaxima" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="VentaMinima" class="control-label"></label>
+                    <input asp-for="VentaMinima" class="form-control" />
+                    <span asp-validation-for="VentaMinima" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="VentaMaxima" class="control-label"></label>
+                    <input asp-for="VentaMaxima" class="form-control" />
+                    <span asp-validation-for="VentaMaxima" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-12 text-right">
+                    <input type="submit" value="Crear" class="btn btn-success" />
+                    <a asp-action="Index" class="btn btn-default">Atrás</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

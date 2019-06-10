@@ -59,6 +59,7 @@
                     <ul class="nav navbar-nav">
                         <!-- Messages: style can be found in dropdown.less-->
                         <!-- Notifications: style can be found in dropdown.less -->
+                        @await Component.InvokeAsync("Notificaciones")
                         <!-- Tasks: style can be found in dropdown.less -->
                         <!-- User Account: style can be found in dropdown.less -->
                         @await Html.PartialAsync("_LoginPartial")
